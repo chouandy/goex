@@ -17,3 +17,9 @@ var PlainContentType = "text/plain; charset=utf-8"
 
 // PlainContentTypeBytes Plain Content-Type bytes format
 var PlainContentTypeBytes = []byte(PlainContentType)
+
+// JSONForbiddenMessage JSON format forbidden message string format
+var JSONForbiddenMessage = `{"message":"Forbidden"}`
+
+// JSONForbiddenMessageBytes JSON format forbidden message bytes format
+var JSONForbiddenMessageBytes = []byte(`{"message":"Forbidden"}`)
