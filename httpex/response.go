@@ -4,10 +4,10 @@ import (
 	"fmt"
 )
 
-// JSONMessageFormat json message format
-var JSONMessageFormat = `{"code":"%s","message":"%s"}`
+// JSONErrorMessageFormat json message format
+var JSONErrorMessageFormat = `{"code":"%s","message":"%s"}`
 
-// APIResponse response for api json format
-func APIResponse(code, message string) string {
-	return fmt.Sprintf(JSONMessageFormat, code, message)
+// JSONErrorResponse response for api json format
+func JSONErrorResponse(code, message string) string {
+	return fmt.Sprintf(JSONErrorMessageFormat, code, message)
 }
