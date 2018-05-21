@@ -7,6 +7,7 @@ var JSONErrorMessageFormat = `{"code":"%s","message":"%s"}`
 
 // Error error struct
 type Error struct {
+	Status  int    `json:"-"`
 	Code    string `json:"code"`
 	Message string `json:"message"`
 }
