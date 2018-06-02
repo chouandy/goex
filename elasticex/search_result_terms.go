@@ -13,21 +13,23 @@ type SearchTermsSumItem struct {
 
 // GetSearchTermBuckets get search term buckets
 func (c *SearchService) GetSearchTermBuckets(sr *elastic.SearchResult) (json.RawMessage, error) {
-	// Init buckets
-	term := map[string]int64{}
-	// Get term items
+	// Init term
+	term := map[string]interface{}{}
+	// Get sub term items
+	subTerm := map[string]int64{}
 	if items, found := sr.Aggregations.Terms(c.TermsAggregation.Fields[0]); found {
 		for _, bucket := range items.Buckets {
 			// Get item value
 			if c.TermsAggregation.SumAggregation == nil {
-				term[bucket.Key.(string)] = bucket.DocCount
+				subTerm[bucket.Key.(string)] = bucket.DocCount
 			} else {
 				sum := SearchTermsSumItem{}
 				sum.UnmarshalJSON(*bucket.Aggregations[c.TermsAggregation.SumAggregation.Field])
-				term[bucket.Key.(string)] = (int64)(sum.Value)
+				subTerm[bucket.Key.(string)] = (int64)(sum.Value)
 			}
 		}
 	}
+	term[c.TermsAggregation.Fields[0]] = subTerm
 
 	return json.Marshal(term)
 }

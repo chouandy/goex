@@ -71,9 +71,11 @@ func TestGetSearchTermBuckets(t *testing.T) {
 				}
 			}`),
 			expected: `{
-				"block": 118094,
-				"threat": 108014,
-				"warning": 118390
+				"event-class": {
+					"block": 118094,
+					"threat": 108014,
+					"warning": 118390
+				}
 			}`,
 		},
 		{
@@ -109,7 +111,9 @@ func TestGetSearchTermBuckets(t *testing.T) {
 					}
 				}
 			}`),
-			expected: `{}`,
+			expected: `{
+				"event-class": {}
+			}`,
 		},
 	}
 
