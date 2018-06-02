@@ -1,8 +1,6 @@
 package elasticex
 
 import (
-	"fmt"
-
 	"github.com/olivere/elastic"
 )
 
@@ -20,7 +18,7 @@ func (c *TermsAggregation) Build() (string, *elastic.TermsAggregation) {
 	for i, field := range c.Fields {
 		aggs = append(aggs, elastic.NewTermsAggregation())
 		// Set field
-		aggs[i] = aggs[i].Field(fmt.Sprintf("%s.keyword", field))
+		aggs[i] = aggs[i].Field(field)
 		// Set ranking size
 		if c.RankingSize > 0 {
 			aggs[i] = aggs[i].Size(c.RankingSize)
