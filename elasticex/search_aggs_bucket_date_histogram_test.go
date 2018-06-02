@@ -31,6 +31,7 @@ func TestDateHistogramAggregation(t *testing.T) {
 				source: `{
 					"date_histogram": {
 						"field": "timestamp",
+						"format": "date_time_no_millis",
 						"interval": "1h"
 					}
 				}`,
@@ -50,6 +51,7 @@ func TestDateHistogramAggregation(t *testing.T) {
 				source: `{
 					"date_histogram": {
 						"field": "timestamp",
+						"format": "date_time_no_millis",
 						"interval": "1h"
 					}
 				}`,
@@ -74,6 +76,7 @@ func TestDateHistogramAggregation(t *testing.T) {
 							"min": 1526017600000
 						},
 						"field": "timestamp",
+						"format": "date_time_no_millis",
 						"interval": "1h"
 					}
 				}`,
@@ -108,6 +111,7 @@ func TestDateHistogramAggregation(t *testing.T) {
 							"min": 1526017600000
 						},
 						"field": "timestamp",
+						"format": "date_time_no_millis",
 						"interval": "1h"
 					}
 				}`,
