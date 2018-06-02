@@ -6,11 +6,6 @@ import (
 	"github.com/olivere/elastic"
 )
 
-// SearchDateHistogramBuckets search date histogram buckets struct
-type SearchDateHistogramBuckets struct {
-	Buckets []SearchDateHistogramItem `json:"buckets"`
-}
-
 // SearchDateHistogramItem search date histogram item struct
 type SearchDateHistogramItem struct {
 	Timestamp int64  `json:"timestamp"`
@@ -26,9 +21,7 @@ type SearchDateHistogramSumItem struct {
 // GetSearchDateHistogramBuckets get search date histogram buckets
 func (c *SearchService) GetSearchDateHistogramBuckets(sr *elastic.SearchResult) (json.RawMessage, error) {
 	// Init buckets
-	buckets := SearchDateHistogramBuckets{
-		Buckets: make([]SearchDateHistogramItem, 0),
-	}
+	buckets := make([]SearchDateHistogramItem, 0)
 	// Get date histogram items
 	if items, found := sr.Aggregations.DateHistogram(c.DateHistogramAggregation.Field); found {
 		for _, bucket := range items.Buckets {
@@ -46,9 +39,9 @@ func (c *SearchService) GetSearchDateHistogramBuckets(sr *elastic.SearchResult) 
 				item.Value = (int64)(sum.Value)
 			}
 			// Append buckets item
-			buckets.Buckets = append(buckets.Buckets, item)
+			buckets = append(buckets, item)
 		}
 	}
 
-	return buckets.MarshalJSON()
+	return json.Marshal(buckets)
 }
