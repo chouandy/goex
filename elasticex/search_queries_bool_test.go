@@ -199,6 +199,52 @@ func TestBoolQuery(t *testing.T) {
 				}
 			}`,
 		},
+		{
+			query: map[string]interface{}{
+				"dev-uuid":    "550e8400-e29b-41d4-a716-446655440000",
+				"profile-id":  213,
+				"event-class": "block",
+			},
+			rangeQuery: &RangeQuery{
+				Name:   "timestamp",
+				Gte:    1527658861,
+				Lte:    1527702061,
+				Format: "epoch_second",
+			},
+			expected: `{
+				"bool": {
+					"must": [{
+						"match_phrase": {
+							"dev-uuid": {
+								"query": "550e8400-e29b-41d4-a716-446655440000"
+							}
+						}
+					}, {
+						"match_phrase": {
+							"profile-id": {
+								"query": 213
+							}
+						}
+					}, {
+						"match_phrase": {
+							"event-class": {
+								"query": "block"
+							}
+						}
+					}, {
+						"range": {
+							"timestamp": {
+								"format": "epoch_second",
+								"from": 1527658861,
+								"include_lower": true,
+								"include_upper": true,
+								"to": 1527702061
+							}
+						}
+					}]
+				}
+			}`,
+		},
 	}
 
 	for i, testCase := range testCases {
