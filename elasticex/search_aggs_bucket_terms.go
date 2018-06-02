@@ -24,7 +24,11 @@ func (c *TermsAggregation) Build() (string, *elastic.TermsAggregation) {
 			aggs[i] = aggs[i].Size(c.RankingSize)
 		}
 		// Set order
-		aggs[i] = aggs[i].OrderByTerm(false)
+		if c.SumAggregation == nil {
+			aggs[i] = aggs[i].OrderByCount(false)
+		} else {
+			aggs[i] = aggs[i].OrderByAggregation(c.SumAggregation.Field, false)
+		}
 		// Set sum aggsregation
 		if c.SumAggregation != nil {
 			aggs[i] = aggs[i].SubAggregation(c.SumAggregation.Field, c.SumAggregation.Build())

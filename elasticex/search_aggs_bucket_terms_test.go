@@ -33,7 +33,7 @@ func TestTermsAggregation(t *testing.T) {
 					"terms": {
 						"field": "event-class",
 						"order": [{
-							"_term": "desc"
+							"_count": "desc"
 						}]
 					}
 				}`,
@@ -64,7 +64,7 @@ func TestTermsAggregation(t *testing.T) {
 					"terms": {
 						"field": "event-class",
 						"order": [{
-							"_term": "desc"
+							"aggregate-count": "desc"
 						}]
 					}
 				}`,
@@ -88,7 +88,7 @@ func TestTermsAggregation(t *testing.T) {
 							"terms": {
 								"field": "event-class",
 								"order": [{
-									"_term": "desc"
+									"_count": "desc"
 								}]
 							}
 						}
@@ -96,7 +96,7 @@ func TestTermsAggregation(t *testing.T) {
 					"terms": {
 						"field": "client-mac",
 						"order": [{
-							"_term": "desc"
+							"_count": "desc"
 						}]
 					}
 				}`,
@@ -121,7 +121,7 @@ func TestTermsAggregation(t *testing.T) {
 							"terms": {
 								"field": "event-class",
 								"order": [{
-									"_term": "desc"
+									"_count": "desc"
 								}],
 								"size": 100
 							}
@@ -130,7 +130,7 @@ func TestTermsAggregation(t *testing.T) {
 					"terms": {
 						"field": "client-mac",
 						"order": [{
-							"_term": "desc"
+							"_count": "desc"
 						}],
 						"size": 100
 					}
@@ -171,7 +171,7 @@ func TestTermsAggregation(t *testing.T) {
 							"terms": {
 								"field": "event-class",
 								"order": [{
-									"_term": "desc"
+									"aggregate-count": "desc"
 								}],
 								"size": 100
 							}
@@ -180,7 +180,7 @@ func TestTermsAggregation(t *testing.T) {
 					"terms": {
 						"field": "client-mac",
 						"order": [{
-							"_term": "desc"
+							"aggregate-count": "desc"
 						}],
 						"size": 100
 					}
