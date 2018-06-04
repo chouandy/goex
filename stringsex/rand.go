@@ -1,15 +1,19 @@
 package stringsex
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 // Alphanumeric alphanumeric characters
-var Alphanumeric = []byte("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+var Alphanumeric = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 // Rand random generate string
-func Rand(runes []byte, n int) string {
+func Rand(characters string, n int) string {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	b := make([]byte, n)
 	for i := range b {
-		b[i] = runes[rand.Intn(len(runes))]
+		b[i] = characters[r.Intn(len(characters))]
 	}
 
 	return string(b)
