@@ -34,9 +34,11 @@ func TestMergeQueryStrings(t *testing.T) {
 
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
-			u, err := MergeQueryStrings(testCase.url, testCase.qs)
+			fmt.Println(testCase.url)
+			err := MergeQueryStrings(&testCase.url, testCase.qs)
+			fmt.Println(testCase.url)
 			assert.IsType(t, nil, err)
-			assert.Equal(t, testCase.expected, u)
+			assert.Equal(t, testCase.expected, testCase.url)
 		})
 	}
 }

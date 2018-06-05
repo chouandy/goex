@@ -3,11 +3,11 @@ package httpex
 import "net/url"
 
 // MergeQueryStrings merge query strings
-func MergeQueryStrings(origin string, qs map[string]string) (string, error) {
+func MergeQueryStrings(origin *string, qs map[string]string) error {
 	// Parse origin url
-	u, err := url.Parse(origin)
+	u, err := url.Parse(*origin)
 	if err != nil {
-		return "", err
+		return err
 	}
 	// Add query strings
 	params := u.Query()
@@ -16,6 +16,8 @@ func MergeQueryStrings(origin string, qs map[string]string) (string, error) {
 	}
 	// Set raw query
 	u.RawQuery = params.Encode()
+	// Update origin
+	*origin = u.String()
 
-	return u.String(), nil
+	return nil
 }
