@@ -15,10 +15,16 @@ type Error interface {
 
 	// Returns the error details message.
 	Message() string
+
+	// Returns the inline representation of the error.
+	ErrorInline() string
 }
 
-// JSONErrorMessageFormat json message format
-var JSONErrorMessageFormat = `{"code":"%s","message":"%s"}`
+// ErrorJSONFormat error json format
+var ErrorJSONFormat = `{"code":"%s","message":"%s"}`
+
+// ErrorInlineFormat error inlne format
+var ErrorInlineFormat = `code: %s, message: %s`
 
 // NewError new error
 func NewError(statusCode int, code, message string) Error {
@@ -56,12 +62,17 @@ func (b baseError) Message() string {
 	return b.message
 }
 
-// Error returns the string representation of the error.
+// Error returns the json representation of the error.
 func (b baseError) Error() string {
-	return fmt.Sprintf(JSONErrorMessageFormat, b.code, b.message)
+	return fmt.Sprintf(ErrorJSONFormat, b.code, b.message)
 }
 
-// String returns the string representation of the error.
+// ErrorInline returns the inline representation of the error.
+func (b baseError) ErrorInline() string {
+	return fmt.Sprintf(ErrorInlineFormat, b.code, b.message)
+}
+
+// String returns the json representation of the error.
 // Alias for Error to satisfy the stringer interface.
 func (b baseError) String() string {
 	return b.Error()
