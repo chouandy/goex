@@ -39,6 +39,18 @@ func (a *Request) CompactRequestBody() []byte {
 	return buffer.Bytes()
 }
 
+// SetQueryStringParameters set query string parameters
+func (a *Request) SetQueryStringParameters(req *http.Request) {
+	if len(a.QueryStringParameters) > 0 {
+		q := req.URL.Query()
+		// Interate request headers
+		for k, v := range a.QueryStringParameters {
+			q.Add(k, v)
+		}
+		req.URL.RawQuery = q.Encode()
+	}
+}
+
 // SetHeaders set headers
 func (a *Request) SetHeaders(req *http.Request) {
 	// Interate request headers
@@ -67,14 +79,23 @@ func (a *Request) Send() (*http.Response, error) {
 		}
 	}
 	// New http request
-	req, err := http.NewRequest(
-		a.HTTPMethod,
-		a.GetURL(),
-		bytes.NewReader(a.CompactRequestBody()),
-	)
+	var req *http.Request
+	var err error
+	if a.HTTPMethod == "GET" {
+		req, err = http.NewRequest(
+			a.HTTPMethod, a.GetURL(), nil,
+		)
+	} else {
+		req, err = http.NewRequest(
+			a.HTTPMethod, a.GetURL(), bytes.NewReader(a.CompactRequestBody()),
+		)
+	}
 	if err != nil {
 		return nil, err
 	}
+	// Set query string parameters
+	a.SetQueryStringParameters(req)
+	// Set headers
 	a.SetHeaders(req)
 
 	return client.Do(req)
