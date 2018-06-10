@@ -2,6 +2,7 @@ package testingex
 
 // HTTPCase http test case struct
 type HTTPCase struct {
-	Request  Request
-	Response Response
+	Description string
+	Request     Request
+	Response    Response
 }
