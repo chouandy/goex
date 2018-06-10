@@ -53,6 +53,12 @@ func (c *BoolQuery) SetClauses(clauses map[string]interface{}) *BoolQuery {
 				queries = append(queries, elastic.NewTermQuery(name, v2))
 			}
 			c = c.Should(queries...)
+		case []interface{}:
+			queries := make([]elastic.Query, 0)
+			for _, v2 := range v {
+				queries = append(queries, elastic.NewTermQuery(name, v2))
+			}
+			c = c.Should(queries...)
 		}
 	}
 
