@@ -40,17 +40,17 @@ func (c *BoolQuery) SetClauses(clauses map[string]interface{}) *BoolQuery {
 	for name, value := range clauses {
 		switch v := value.(type) {
 		case string, int, int32, int64, float32, float64:
-			c = c.Must(elastic.NewMatchPhraseQuery(name, v))
+			c = c.Must(elastic.NewTermQuery(name, v))
 		case []string:
 			queries := make([]elastic.Query, 0)
 			for _, v2 := range v {
-				queries = append(queries, elastic.NewMatchPhraseQuery(name, v2))
+				queries = append(queries, elastic.NewTermQuery(name, v2))
 			}
 			c = c.Should(queries...)
 		case []int:
 			queries := make([]elastic.Query, 0)
 			for _, v2 := range v {
-				queries = append(queries, elastic.NewMatchPhraseQuery(name, v2))
+				queries = append(queries, elastic.NewTermQuery(name, v2))
 			}
 			c = c.Should(queries...)
 		}

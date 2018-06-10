@@ -14,7 +14,9 @@ func (c *SearchService) BuildSearchSource() (json.RawMessage, error) {
 	ss = ss.Size(c.Size)
 	// Set sorter
 	if c.Sorter != nil {
-		ss = ss.Sort(c.Sorter.Field, c.Sorter.Ascending)
+		sorter := elastic.NewFieldSort(c.Sorter.Field)
+		sorter = sorter.Order(c.Sorter.Ascending).UnmappedType("boolean")
+		ss = ss.SortBy(sorter)
 	}
 	// Set search after
 	if c.SearchAfter != nil {

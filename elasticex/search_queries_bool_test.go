@@ -27,25 +27,19 @@ func TestBoolQuery(t *testing.T) {
 			expected: `{
 				"bool": {
 					"must": [{
-						"match_phrase": {
-							"dev-uuid": {
-								"query": "550e8400-e29b-41d4-a716-446655440000"
-							}
+						"term": {
+							"dev-uuid": "550e8400-e29b-41d4-a716-446655440000"
 						}
 					}, {
 						"bool": {
 							"minimum_should_match": "1",
 							"should": [{
-								"match_phrase": {
-									"event-class": {
-										"query": "threat"
-									}
+								"term": {
+									"event-class": "threat"
 								}
 							}, {
-								"match_phrase": {
-									"event-class": {
-										"query": "warning"
-									}
+								"term": {
+									"event-class": "warning"
 								}
 							}]
 						}
@@ -69,25 +63,19 @@ func TestBoolQuery(t *testing.T) {
 			expected: `{
 				"bool": {
 					"must": [{
-						"match_phrase": {
-							"dev-uuid": {
-								"query": "550e8400-e29b-41d4-a716-446655440000"
-							}
+						"term": {
+							"dev-uuid": "550e8400-e29b-41d4-a716-446655440000"
 						}
 					}, {
 						"bool": {
 							"minimum_should_match": "1",
 							"should": [{
-								"match_phrase": {
-									"event-class": {
-										"query": "threat"
-									}
+								"term": {
+									"event-class": "threat"
 								}
 							}, {
-								"match_phrase": {
-									"event-class": {
-										"query": "warning"
-									}
+								"term": {
+									"event-class": "warning"
 								}
 							}]
 						}
@@ -95,22 +83,16 @@ func TestBoolQuery(t *testing.T) {
 						"bool": {
 							"minimum_should_match": "1",
 							"should": [{
-								"match_phrase": {
-									"client-mac": {
-										"query": "AABBCCDDEEFF"
-									}
+								"term": {
+									"client-mac": "AABBCCDDEEFF"
 								}
 							}, {
-								"match_phrase": {
-									"client-mac": {
-										"query": "BBCCDDEEFFAA"
-									}
+								"term": {
+									"client-mac": "BBCCDDEEFFAA"
 								}
 							}, {
-								"match_phrase": {
-									"client-mac": {
-										"query": "CCDDEEFFAABB"
-									}
+								"term": {
+									"client-mac": "CCDDEEFFAABB"
 								}
 							}]
 						}
@@ -140,25 +122,19 @@ func TestBoolQuery(t *testing.T) {
 			expected: `{
 				"bool": {
 					"must": [{
-						"match_phrase": {
-							"dev-uuid": {
-								"query": "550e8400-e29b-41d4-a716-446655440000"
-							}
+						"term": {
+							"dev-uuid": "550e8400-e29b-41d4-a716-446655440000"
 						}
 					}, {
 						"bool": {
 							"minimum_should_match": "1",
 							"should": [{
-								"match_phrase": {
-									"event-class": {
-										"query": "threat"
-									}
+								"term": {
+									"event-class": "threat"
 								}
 							}, {
-								"match_phrase": {
-									"event-class": {
-										"query": "warning"
-									}
+								"term": {
+									"event-class": "warning"
 								}
 							}]
 						}
@@ -166,22 +142,16 @@ func TestBoolQuery(t *testing.T) {
 						"bool": {
 							"minimum_should_match": "1",
 							"should": [{
-								"match_phrase": {
-									"client-mac": {
-										"query": "AABBCCDDEEFF"
-									}
+								"term": {
+									"client-mac": "AABBCCDDEEFF"
 								}
 							}, {
-								"match_phrase": {
-									"client-mac": {
-										"query": "BBCCDDEEFFAA"
-									}
+								"term": {
+									"client-mac": "BBCCDDEEFFAA"
 								}
 							}, {
-								"match_phrase": {
-									"client-mac": {
-										"query": "CCDDEEFFAABB"
-									}
+								"term": {
+									"client-mac": "CCDDEEFFAABB"
 								}
 							}]
 						}
@@ -214,22 +184,16 @@ func TestBoolQuery(t *testing.T) {
 			expected: `{
 				"bool": {
 					"must": [{
-						"match_phrase": {
-							"dev-uuid": {
-								"query": "550e8400-e29b-41d4-a716-446655440000"
-							}
+						"term": {
+							"dev-uuid": "550e8400-e29b-41d4-a716-446655440000"
 						}
 					}, {
-						"match_phrase": {
-							"profile-id": {
-								"query": 213
-							}
+						"term": {
+							"profile-id": 213
 						}
 					}, {
-						"match_phrase": {
-							"event-class": {
-								"query": "block"
-							}
+						"term": {
+							"event-class": "block"
 						}
 					}, {
 						"range": {
