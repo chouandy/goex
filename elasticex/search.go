@@ -7,5 +7,5 @@ type SearchService struct {
 	BoolQuery                *BoolQuery
 	Size                     int
 	Sorter                   *Sorter
-	SearchAfter              interface{}
+	SearchAfterQuery         *SearchAfterQuery
 }

@@ -23,10 +23,14 @@ func (c *SearchService) GetSearchHits(sr *elastic.SearchResult) (json.RawMessage
 	if hitsCount > 0 {
 		// Iterate through hits
 		for i, hit := range sr.Hits.Hits {
+			// Check is last hit or not
+			if c.SearchAfterQuery != nil && c.SearchAfterQuery.IsLastHit(hit.Sort[0].(float64)) {
+				break
+			}
 			// Get source
 			hits.Hits = append(hits.Hits, *hit.Source)
 			// Get search after
-			if i+1 == hitsCount {
+			if i+1 == hitsCount && c.Size == hitsCount {
 				hits.SearchAfter = hit.Sort[0]
 			}
 		}

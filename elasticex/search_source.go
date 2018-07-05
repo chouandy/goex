@@ -19,8 +19,8 @@ func (c *SearchService) BuildSearchSource() (json.RawMessage, error) {
 		ss = ss.SortBy(sorter)
 	}
 	// Set search after
-	if c.SearchAfter != nil {
-		ss = ss.SearchAfter(c.SearchAfter)
+	if c.SearchAfterQuery != nil {
+		ss = ss.SearchAfter(c.SearchAfterQuery.SearchAfter)
 	}
 	// Set terms aggregation
 	if c.TermsAggregation != nil {
