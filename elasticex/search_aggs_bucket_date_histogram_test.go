@@ -124,11 +124,11 @@ func TestDateHistogramAggregation(t *testing.T) {
 			name, agg := testCase.agg.Build()
 			assert.Equal(t, testCase.expected.name, name)
 			source, err := agg.Source()
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			data, err := json.Marshal(source)
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected.source))
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, string(buffer.Bytes()), string(data))
 		})
 	}

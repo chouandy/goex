@@ -37,7 +37,7 @@ func TestMergeQueryStrings(t *testing.T) {
 			fmt.Println(testCase.url)
 			err := MergeQueryStrings(&testCase.url, testCase.qs)
 			fmt.Println(testCase.url)
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, testCase.expected, testCase.url)
 		})
 	}

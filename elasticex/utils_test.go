@@ -42,7 +42,7 @@ func TestConvertIntervalToSeconds(t *testing.T) {
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			seconds, err := ConvertIntervalToSeconds(testCase.interval)
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, testCase.expected, seconds)
 		})
 	}

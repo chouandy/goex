@@ -264,12 +264,12 @@ func TestBoolQuery(t *testing.T) {
 			query = query.SetClauses(testCase.query)
 			query.RangeQuery = testCase.rangeQuery
 			source, err := query.Build().Source()
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			data, err := json.Marshal(source)
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, string(buffer.Bytes()), string(data))
 		})
 	}

@@ -121,12 +121,12 @@ func TestGetSearchTermBuckets(t *testing.T) {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			buffer := new(bytes.Buffer)
 			err := json.Compact(buffer, testCase.searchResult)
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			result, err := testCase.searchService.ParseSearchResult(buffer.Bytes())
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			buffer = new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, string(buffer.Bytes()), string(result))
 		})
 	}
@@ -421,12 +421,12 @@ func TestGetSearchTermsBuckets(t *testing.T) {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			buffer := new(bytes.Buffer)
 			err := json.Compact(buffer, testCase.searchResult)
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			result, err := testCase.searchService.ParseSearchResult(buffer.Bytes())
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			buffer = new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, string(buffer.Bytes()), string(result))
 		})
 	}

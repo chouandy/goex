@@ -58,12 +58,12 @@ func TestRangeQuery(t *testing.T) {
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			source, err := testCase.query.Build().Source()
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			data, err := json.Marshal(source)
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))
-			assert.IsType(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, string(buffer.Bytes()), string(data))
 		})
 	}
