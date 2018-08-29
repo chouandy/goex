@@ -1,17 +1,20 @@
 package apigwex
 
 import (
+	"net/http"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/chouandy/goex/httpex"
 )
 
-// ErrorResponse error response
-func ErrorResponse(err httpex.Error) (events.APIGatewayProxyResponse, error) {
+// OKResponse ok response
+func OKResponse(body string) (events.APIGatewayProxyResponse, error) {
+	Logger.SetStatus(http.StatusOK)
 	return events.APIGatewayProxyResponse{
-		StatusCode: err.StatusCode(),
+		StatusCode: http.StatusOK,
 		Headers: map[string]string{
 			"Content-Type": httpex.JSONContentType,
 		},
-		Body: err.Error(),
+		Body: body,
 	}, nil
 }

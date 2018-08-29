@@ -10,9 +10,9 @@ import (
 
 func TestRouter(t *testing.T) {
 	// Set routers
-	router := make(Router)
-	router.Add("GET", "not_found", func(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		return NotFoundResponse()
+	NewRouter()
+	Router.Add("GET", "hello", func(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+		return OKResponse("world")
 	})
 	// Set test cases
 	testCases := []struct {
@@ -22,24 +22,22 @@ func TestRouter(t *testing.T) {
 	}{
 		{
 			method:   "GET",
-			path:     "not_found",
-			expected: `{"message":"404 Not Found"}`,
+			path:     "hello",
+			expected: "world",
 		},
 		{
 			method:   "GET",
-			path:     "invald",
+			path:     "not_found",
 			expected: `{"message":"404 Not Found"}`,
 		},
 	}
 
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
-			handler, ok := router.Get(testCase.method, testCase.path)
-			if !ok {
-				assert.Nil(t, handler)
-				return
-			}
 			request := events.APIGatewayProxyRequest{}
+			NewLogger(request)
+			defer Logger.Log()
+			handler := Router.Get(testCase.method, testCase.path)
 			resp, err := handler(request)
 			assert.Nil(t, err)
 			assert.Equal(t, testCase.expected, resp.Body)
