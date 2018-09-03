@@ -26,13 +26,13 @@ type APIGWRouter struct {
 
 // Add add route by method, path
 func (r APIGWRouter) Add(method, path string, hander HandlerFunc) {
-	key := strings.ToLower(method + "/" + path)
+	key := strings.ToLower(method + ":" + path)
 	r.Routes[key] = hander
 }
 
 // Get get route by method, path
 func (r APIGWRouter) Get(method, path string) HandlerFunc {
-	key := strings.ToLower(method + "/" + path)
+	key := strings.ToLower(method + ":" + path)
 	handler, ok := r.Routes[key]
 	if !ok {
 		return NotFoundHandler

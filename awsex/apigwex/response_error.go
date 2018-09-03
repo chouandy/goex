@@ -8,6 +8,7 @@ import (
 // ErrorResponse error response
 func ErrorResponse(err httpex.Error) (events.APIGatewayProxyResponse, error) {
 	Logger.SetStatus(err.StatusCode())
+	Logger.Log()
 	return events.APIGatewayProxyResponse{
 		StatusCode: err.StatusCode(),
 		Headers: map[string]string{
