@@ -110,6 +110,8 @@ func easyjson22b64118DecodeGithubComChouandyGoexAwsexApigwex(in *jlexer.Lexer, o
 			if data := in.Raw(); in.Ok() {
 				in.AddError((out.Metadata).UnmarshalJSON(data))
 			}
+		case "location":
+			out.Location = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -281,6 +283,16 @@ func easyjson22b64118EncodeGithubComChouandyGoexAwsexApigwex(out *jwriter.Writer
 			out.RawString(prefix)
 		}
 		out.Raw((in.Metadata).MarshalJSON())
+	}
+	if in.Location != "" {
+		const prefix string = ",\"location\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.Location))
 	}
 	out.RawByte('}')
 }

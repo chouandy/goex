@@ -3,6 +3,7 @@ package apigwex
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -44,6 +45,7 @@ type Logger struct {
 	Body                  string            `json:"body,omitempty"`
 	Error                 json.RawMessage   `json:"error,omitempty"`
 	Metadata              json.RawMessage   `json:"metadata,omitempty"`
+	Location              string            `json:"location,omitempty"`
 }
 
 // Identity identity struct
@@ -54,10 +56,20 @@ type Identity struct {
 	UserAgent string `json:"user_agent"`
 }
 
-// SetStatus set status
-func (l *Logger) SetStatus(status int) {
-	l.Status = status
-	l.Level = httpex.GetLogLevel(status)
+// Set set by apigw response
+func (l *Logger) Set(resp events.APIGatewayProxyResponse) {
+	// Set status code
+	l.Status = resp.StatusCode
+	// Set level
+	l.Level = httpex.GetLogLevel(resp.StatusCode)
+	// Set error ( status code >= 400 )
+	if resp.StatusCode >= http.StatusBadRequest {
+		l.Error = json.RawMessage(resp.Body)
+	}
+	// Set location ( status code == 302 )
+	if resp.StatusCode == http.StatusFound {
+		l.Location = resp.Headers["Location"]
+	}
 }
 
 // Log print logger
