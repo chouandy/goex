@@ -9,12 +9,9 @@ import (
 	"github.com/chouandy/goex/httpex"
 )
 
-// Logger logger
-var Logger *APIGWLogger
-
 // NewLogger new Logger instance
-func NewLogger(request events.APIGatewayProxyRequest) {
-	Logger = &APIGWLogger{
+func NewLogger(request events.APIGatewayProxyRequest) *Logger {
+	return &Logger{
 		RequestTime: time.Now().UTC(),
 		RequestID:   request.RequestContext.RequestID,
 		Method:      request.HTTPMethod,
@@ -31,8 +28,8 @@ func NewLogger(request events.APIGatewayProxyRequest) {
 	}
 }
 
-// APIGWLogger apigw logger struct
-type APIGWLogger struct {
+// Logger apigw logger struct
+type Logger struct {
 	RequestTime           time.Time         `json:"-"`
 	Timestamp             string            `json:"timestamp"`
 	RequestID             string            `json:"request_id"`
@@ -58,13 +55,13 @@ type Identity struct {
 }
 
 // SetStatus set status
-func (l *APIGWLogger) SetStatus(status int) {
+func (l *Logger) SetStatus(status int) {
 	l.Status = status
 	l.Level = httpex.GetLogLevel(status)
 }
 
 // Log print logger
-func (l *APIGWLogger) Log() {
+func (l *Logger) Log() {
 	// Log timestamp and latency
 	end := time.Now().UTC()
 	l.Timestamp = end.Format(time.RFC3339)
