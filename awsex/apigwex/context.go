@@ -1,7 +1,6 @@
 package apigwex
 
 import (
-	"encoding/binary"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -25,6 +24,7 @@ func NewContext(request events.APIGatewayProxyRequest) (ctx *Context) {
 			Path:        request.Path,
 			QueryStringParameters: request.QueryStringParameters,
 			PathParameters:        request.PathParameters,
+			Body:                  request.Body,
 			Identity: &Identity{
 				AccountID: request.RequestContext.Identity.AccountID,
 				SourceIP:  request.RequestContext.Identity.SourceIP,
@@ -32,10 +32,6 @@ func NewContext(request events.APIGatewayProxyRequest) (ctx *Context) {
 				UserAgent: request.RequestContext.Identity.UserAgent,
 			},
 		},
-	}
-	// If request body less then 2k, logger body
-	if binary.Size([]byte(request.Body)) <= 2048 {
-		ctx.Logger.Body = request.Body
 	}
 
 	return
