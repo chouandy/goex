@@ -2,12 +2,7 @@ package apigwex
 
 import (
 	"strings"
-
-	"github.com/aws/aws-lambda-go/events"
 )
-
-// HandlerFunc handler func
-type HandlerFunc func(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)
 
 // NewRouter new router
 func NewRouter() *Router {

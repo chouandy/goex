@@ -3,31 +3,10 @@ package apigwex
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"time"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/chouandy/goex/httpex"
 )
-
-// NewLogger new Logger instance
-func NewLogger(request events.APIGatewayProxyRequest) *Logger {
-	return &Logger{
-		RequestTime: time.Now().UTC(),
-		RequestID:   request.RequestContext.RequestID,
-		Method:      request.HTTPMethod,
-		Path:        request.Path,
-		QueryStringParameters: request.QueryStringParameters,
-		PathParameters:        request.PathParameters,
-		Body:                  request.Body,
-		Identity: &Identity{
-			AccountID: request.RequestContext.Identity.AccountID,
-			SourceIP:  request.RequestContext.Identity.SourceIP,
-			UserArn:   request.RequestContext.Identity.UserArn,
-			UserAgent: request.RequestContext.Identity.UserAgent,
-		},
-	}
-}
 
 // Logger apigw logger struct
 type Logger struct {
@@ -44,8 +23,8 @@ type Logger struct {
 	PathParameters        map[string]string `json:"path_parameters,omitempty"`
 	Body                  string            `json:"body,omitempty"`
 	Error                 json.RawMessage   `json:"error,omitempty"`
-	Metadata              json.RawMessage   `json:"metadata,omitempty"`
 	Location              string            `json:"location,omitempty"`
+	Metadata              json.RawMessage   `json:"metadata,omitempty"`
 }
 
 // Identity identity struct
@@ -56,20 +35,10 @@ type Identity struct {
 	UserAgent string `json:"user_agent"`
 }
 
-// Set set by apigw response
-func (l *Logger) Set(resp events.APIGatewayProxyResponse) {
-	// Set status code
-	l.Status = resp.StatusCode
-	// Set level
-	l.Level = httpex.GetLogLevel(resp.StatusCode)
-	// Set error ( status code >= 400 )
-	if resp.StatusCode >= http.StatusBadRequest {
-		l.Error = json.RawMessage(resp.Body)
-	}
-	// Set location ( status code == 302 )
-	if resp.StatusCode == http.StatusFound {
-		l.Location = resp.Headers["Location"]
-	}
+// SetStatus set status
+func (l *Logger) SetStatus(status int) {
+	l.Status = status
+	l.Level = httpex.GetLogLevel(status)
 }
 
 // Log print logger

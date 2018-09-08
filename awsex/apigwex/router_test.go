@@ -11,9 +11,10 @@ import (
 func TestRouter(t *testing.T) {
 	// Set routers
 	router := NewRouter()
-	router.Add("GET", "hello", func(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-		return OKResponse("world")
+	router.Add("GET", "hello", func(ctx *Context) {
+		ctx.OKResponse("world")
 	})
+
 	// Set test cases
 	testCases := []struct {
 		method   string
@@ -35,10 +36,9 @@ func TestRouter(t *testing.T) {
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			request := events.APIGatewayProxyRequest{}
-			handler := router.Get(testCase.method, testCase.path)
-			resp, err := handler(request)
-			assert.Nil(t, err)
-			assert.Equal(t, testCase.expected, resp.Body)
+			ctx := NewContext(request)
+			router.Get(testCase.method, testCase.path)(ctx)
+			assert.Equal(t, testCase.expected, ctx.Response.Body)
 		})
 	}
 }
