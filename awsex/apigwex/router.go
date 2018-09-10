@@ -1,8 +1,6 @@
 package apigwex
 
-import (
-	"strings"
-)
+import "strings"
 
 // NewRouter new router
 func NewRouter() *Router {
@@ -17,13 +15,13 @@ type Router struct {
 }
 
 // Add add route by method, path
-func (r Router) Add(method, path string, hander HandlerFunc) {
+func (r *Router) Add(method, path string, hander HandlerFunc) {
 	key := strings.ToLower(method + ":" + path)
 	r.Routes[key] = hander
 }
 
 // Get get route by method, path
-func (r Router) Get(method, path string) HandlerFunc {
+func (r *Router) Get(method, path string) HandlerFunc {
 	key := strings.ToLower(method + ":" + path)
 	handler, ok := r.Routes[key]
 	if !ok {
