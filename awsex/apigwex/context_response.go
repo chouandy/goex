@@ -20,6 +20,9 @@ func (c *Context) OKResponse(body string) {
 	}
 	// Logger
 	c.Logger.SetStatus(http.StatusOK)
+	if DEBUG == "1" {
+		c.Logger.Response = json.RawMessage(c.Response.Body)
+	}
 	c.Logger.Log()
 }
 

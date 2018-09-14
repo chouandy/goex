@@ -1,10 +1,14 @@
 package apigwex
 
 import (
+	"os"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 )
+
+// DEBUG debug
+var DEBUG = os.Getenv("DEBUG")
 
 // Context context struct
 type Context struct {
@@ -18,10 +22,10 @@ func NewContext(request events.APIGatewayProxyRequest) (ctx *Context) {
 	ctx = &Context{
 		Request: request,
 		Logger: Logger{
-			RequestTime: time.Now().UTC(),
-			RequestID:   request.RequestContext.RequestID,
-			Method:      request.HTTPMethod,
-			Path:        request.Path,
+			RequestTime:           time.Now().UTC(),
+			RequestID:             request.RequestContext.RequestID,
+			Method:                request.HTTPMethod,
+			Path:                  request.Path,
 			QueryStringParameters: request.QueryStringParameters,
 			PathParameters:        request.PathParameters,
 			Body:                  request.Body,

@@ -25,6 +25,7 @@ type Logger struct {
 	Error                 json.RawMessage   `json:"error,omitempty"`
 	Location              string            `json:"location,omitempty"`
 	Metadata              json.RawMessage   `json:"metadata,omitempty"`
+	Response              json.RawMessage   `json:"response,omitempty"`
 }
 
 // Identity identity struct
