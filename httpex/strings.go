@@ -25,7 +25,13 @@ var OKMessage = `{"message":"ok"}`
 var OKMessageBytes = []byte(OKMessage)
 
 // NotFoundMessage not found message
-var NotFoundMessage = `{"message":"404 Not Found"}`
+var NotFoundMessage = `{"message":"Not Found"}`
 
 // NotFoundMessageBytes not found message bytes format
 var NotFoundMessageBytes = []byte(NotFoundMessage)
+
+// InternalServerErrorMessage not found message
+var InternalServerErrorMessage = `{"message":"Internal Server Error"}`
+
+// InternalServerErrorMessageBytes not found message bytes format
+var InternalServerErrorMessageBytes = []byte(InternalServerErrorMessage)
