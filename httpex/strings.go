@@ -17,3 +17,15 @@ var PlainContentType = "text/plain; charset=utf-8"
 
 // PlainContentTypeBytes Plain Content-Type bytes format
 var PlainContentTypeBytes = []byte(PlainContentType)
+
+// OKMessage ok message
+var OKMessage = `{"message":"ok"}`
+
+// OKMessageBytes ok message bytes format
+var OKMessageBytes = []byte(OKMessage)
+
+// NotFoundMessage not found message
+var NotFoundMessage = `{"message":"404 Not Found"}`
+
+// NotFoundMessageBytes not found message bytes format
+var NotFoundMessageBytes = []byte(NotFoundMessage)
