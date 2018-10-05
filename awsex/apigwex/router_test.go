@@ -29,7 +29,7 @@ func TestRouter(t *testing.T) {
 		{
 			method:   "GET",
 			path:     "not_found",
-			expected: `{"message":"404 Not Found"}`,
+			expected: `{"message":"Not Found"}`,
 		},
 	}
 

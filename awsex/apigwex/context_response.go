@@ -60,7 +60,7 @@ func (c *Context) NotFoundResponse() {
 		Headers: map[string]string{
 			"Content-Type": httpex.JSONContentType,
 		},
-		Body: `{"message":"404 Not Found"}`,
+		Body: `{"message":"Not Found"}`,
 	}
 	// Logger
 	c.Logger.SetStatus(http.StatusNotFound)
