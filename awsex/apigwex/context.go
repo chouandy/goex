@@ -20,6 +20,9 @@ type Context struct {
 	Request     events.APIGatewayProxyRequest
 	Response    events.APIGatewayProxyResponse
 	Logger      Logger
+
+	// Extra
+	Region string
 }
 
 // NewContext new context
