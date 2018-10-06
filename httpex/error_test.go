@@ -41,6 +41,18 @@ func TestError(t *testing.T) {
 				inline:     `code: 500.1, message: Failed to load default aws config`,
 			},
 		},
+		{
+			err: NewError(403, "", "Forbidden"),
+			expected: struct {
+				statusCode int
+				json       string
+				inline     string
+			}{
+				statusCode: 403,
+				json:       `{"message":"Forbidden"}`,
+				inline:     `Forbidden`,
+			},
+		},
 	}
 
 	for i, testCase := range testCases {

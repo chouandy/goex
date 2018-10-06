@@ -1,7 +1,5 @@
 package httpex
 
-import "fmt"
-
 // Error error struct
 type Error interface {
 	// Satisfy the generic error interface.
@@ -19,12 +17,6 @@ type Error interface {
 	// Returns the inline representation of the error.
 	ErrorInline() string
 }
-
-// ErrorJSONFormat error json format
-var ErrorJSONFormat = `{"code":"%s","message":"%s"}`
-
-// ErrorInlineFormat error inlne format
-var ErrorInlineFormat = `code: %s, message: %s`
 
 // NewError new error
 func NewError(statusCode int, code, message string) Error {
@@ -64,12 +56,18 @@ func (b baseError) Message() string {
 
 // Error returns the json representation of the error.
 func (b baseError) Error() string {
-	return fmt.Sprintf(ErrorJSONFormat, b.code, b.message)
+	if len(b.code) == 0 {
+		return `{"message":"` + b.message + `"}`
+	}
+	return `{"code":"` + b.code + `","message":"` + b.message + `"}`
 }
 
 // ErrorInline returns the inline representation of the error.
 func (b baseError) ErrorInline() string {
-	return fmt.Sprintf(ErrorInlineFormat, b.code, b.message)
+	if len(b.code) == 0 {
+		return b.message
+	}
+	return `code: ` + b.code + `, message: ` + b.message
 }
 
 // String returns the json representation of the error.
