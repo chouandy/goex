@@ -3,14 +3,10 @@ package apigwex
 import (
 	"encoding/json"
 	"fmt"
-	"time"
-
-	"github.com/chouandy/goex/httpex"
 )
 
 // Logger apigw logger struct
 type Logger struct {
-	RequestTime           time.Time         `json:"-"`
 	Timestamp             string            `json:"timestamp"`
 	RequestID             string            `json:"request_id"`
 	Level                 string            `json:"level"`
@@ -36,20 +32,9 @@ type Identity struct {
 	UserAgent string `json:"user_agent"`
 }
 
-// SetStatus set status
-func (l *Logger) SetStatus(status int) {
-	l.Status = status
-	l.Level = httpex.GetLogLevel(status)
-}
-
-// Log print logger
+// Log log
 func (l *Logger) Log() {
-	// Log timestamp and latency
-	end := time.Now().UTC()
-	l.Timestamp = end.Format(time.RFC3339)
-	l.Latency = fmt.Sprintf("%v", end.Sub(l.RequestTime))
-	// Log to json format
-	if data, err := l.MarshalJSON(); err == nil {
+	if data, err := jsonex.Marshal(l); err == nil {
 		fmt.Println(string(data))
 	}
 }

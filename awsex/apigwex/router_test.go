@@ -11,8 +11,10 @@ import (
 func TestRouter(t *testing.T) {
 	// Set routers
 	router := NewRouter()
-	router.Add("GET", "hello", func(ctx *Context) {
-		ctx.OKResponse("world")
+	router.Add("GET", "hello", &Route{
+		Handler: func(ctx *Context) {
+			ctx.OKResponse("world")
+		},
 	})
 
 	// Set test cases
@@ -23,12 +25,12 @@ func TestRouter(t *testing.T) {
 	}{
 		{
 			method:   "GET",
-			path:     "hello",
+			path:     "/hello",
 			expected: "world",
 		},
 		{
 			method:   "GET",
-			path:     "not_found",
+			path:     "/not_found",
 			expected: `{"message":"Not Found"}`,
 		},
 	}
@@ -37,7 +39,7 @@ func TestRouter(t *testing.T) {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			request := events.APIGatewayProxyRequest{}
 			ctx := NewContext(request)
-			router.Get(testCase.method, testCase.path)(ctx)
+			ctx.WrapRoute(router.Get(testCase.method, testCase.path))
 			assert.Equal(t, testCase.expected, ctx.Response.Body)
 		})
 	}

@@ -1,31 +1,42 @@
 package apigwex
 
-import "strings"
+// HandlerFunc handler func
+type HandlerFunc func(ctx *Context)
 
-// NewRouter new router
-func NewRouter() *Router {
-	return &Router{
-		Routes: map[string]HandlerFunc{},
-	}
+// MiddlewareFunc middleware func
+type MiddlewareFunc func(ctx *Context) error
+
+// Route route
+type Route struct {
+	Handler     HandlerFunc
+	Middlewares []MiddlewareFunc
+	Logging     bool
 }
 
 // Router router
 type Router struct {
-	Routes map[string]HandlerFunc
+	Routes map[string]*Route
+}
+
+// NewRouter new router
+func NewRouter() *Router {
+	return &Router{
+		Routes: map[string]*Route{},
+	}
 }
 
 // Add add route by method, path
-func (r *Router) Add(method, path string, hander HandlerFunc) {
-	key := strings.ToLower(method + ":" + path)
-	r.Routes[key] = hander
+func (r *Router) Add(method, path string, route *Route) {
+	r.Routes[method+":"+path] = route
 }
 
 // Get get route by method, path
-func (r *Router) Get(method, path string) HandlerFunc {
-	key := strings.ToLower(method + ":" + path)
-	handler, ok := r.Routes[key]
+func (r *Router) Get(method, path string) *Route {
+	route, ok := r.Routes[method+":"+path]
 	if !ok {
-		return NotFoundHandler
+		return &Route{
+			Handler: NotFoundHandler,
+		}
 	}
-	return handler
+	return route
 }
