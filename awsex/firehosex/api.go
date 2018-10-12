@@ -7,10 +7,10 @@ import (
 )
 
 // PutRecords put records to firehose
-func PutRecords(streamName string, records []firehose.Record) error {
+func PutRecords(deliveryStreamName string, records []firehose.Record) error {
 	// Build request input
 	input := &firehose.PutRecordBatchInput{
-		DeliveryStreamName: aws.String(streamName),
+		DeliveryStreamName: aws.String(deliveryStreamName),
 		Records:            records,
 	}
 	// New request
@@ -18,6 +18,28 @@ func PutRecords(streamName string, records []firehose.Record) error {
 	// Send request
 	if _, err := req.Send(); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// PutChunkRecords put chunk records to firehose
+func PutChunkRecords(deliveryStreamName string, records []firehose.Record, chunkSize int) error {
+	// Get records num
+	recordsNum := len(records)
+	// Chunk records and upload to firehose
+	for i := 0; i < recordsNum; i += chunkSize {
+		// New chunk end
+		end := i + chunkSize
+		if end > recordsNum {
+			end = recordsNum
+		}
+		// Get chunk
+		chunk := records[i:end]
+		// Upload to firehose
+		if err := PutRecords(deliveryStreamName, chunk); err != nil {
+			return err
+		}
 	}
 
 	return nil
