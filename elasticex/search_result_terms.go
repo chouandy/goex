@@ -24,14 +24,14 @@ func (c *SearchService) GetSearchTermBuckets(sr *elastic.SearchResult) (json.Raw
 				subTerm[bucket.Key.(string)] = bucket.DocCount
 			} else {
 				sum := SearchTermsSumItem{}
-				sum.UnmarshalJSON(*bucket.Aggregations[c.TermsAggregation.SumAggregation.Field])
+				jsonex.Unmarshal(*bucket.Aggregations[c.TermsAggregation.SumAggregation.Field], &sum)
 				subTerm[bucket.Key.(string)] = (int64)(sum.Value)
 			}
 		}
 	}
 	term[c.TermsAggregation.Fields[0]] = subTerm
 
-	return json.Marshal(term)
+	return jsonex.Marshal(term)
 }
 
 // GetSearchTermsBuckets get search terms buckets
@@ -54,7 +54,7 @@ func (c *SearchService) GetSearchTermsBuckets(sr *elastic.SearchResult) (json.Ra
 						subTerm[subBucket.Key.(string)] = subBucket.DocCount
 					} else {
 						sum := SearchTermsSumItem{}
-						sum.UnmarshalJSON(*subBucket.Aggregations[c.TermsAggregation.SumAggregation.Field])
+						jsonex.Unmarshal(*subBucket.Aggregations[c.TermsAggregation.SumAggregation.Field], &sum)
 						subTerm[subBucket.Key.(string)] = (int64)(sum.Value)
 					}
 				}
@@ -65,5 +65,5 @@ func (c *SearchService) GetSearchTermsBuckets(sr *elastic.SearchResult) (json.Ra
 		}
 	}
 
-	return json.Marshal(terms)
+	return jsonex.Marshal(terms)
 }

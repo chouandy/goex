@@ -36,5 +36,5 @@ func (c *SearchService) GetSearchHits(sr *elastic.SearchResult) (json.RawMessage
 		}
 	}
 
-	return hits.MarshalJSON()
+	return jsonex.Marshal(hits)
 }

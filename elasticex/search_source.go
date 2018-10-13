@@ -40,5 +40,5 @@ func (c *SearchService) BuildSearchSource() (json.RawMessage, error) {
 		return nil, err
 	}
 
-	return json.Marshal(src)
+	return jsonex.Marshal(src)
 }
