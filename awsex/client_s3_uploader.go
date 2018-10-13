@@ -1,11 +1,13 @@
 package awsex
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3manager"
 	"github.com/chouandy/goex/awsex/apigwex"
+	"github.com/chouandy/goex/awsex/sfnex"
 	"github.com/chouandy/goex/httpex"
 )
 
@@ -31,6 +33,20 @@ func InitS3UploaderMiddleware(ctx *apigwex.Context) error {
 		if err := InitS3Uploader(ctx.Region); err != nil {
 			fmt.Println(err)
 			return httpex.NewError(500, "", "Failed to init s3 uploader")
+		}
+		fmt.Println("done")
+	}
+
+	return nil
+}
+
+// InitS3UploaderTaskMiddleware init s3 uploader task middleware
+func InitS3UploaderTaskMiddleware(ctx *sfnex.Context) error {
+	if S3Uploader == nil {
+		fmt.Print("[Middleware] Init S3 Uploader...")
+		if err := InitS3Uploader(ctx.Region); err != nil {
+			fmt.Println(err)
+			return errors.New("Failed to init s3 uploader")
 		}
 		fmt.Println("done")
 	}

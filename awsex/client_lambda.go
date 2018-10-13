@@ -1,7 +1,10 @@
 package awsex
 
 import (
+	"errors"
 	"fmt"
+
+	"github.com/chouandy/goex/awsex/sfnex"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
@@ -31,6 +34,20 @@ func InitLambdaClientMiddleware(ctx *apigwex.Context) error {
 		if err := InitLambdaClient(ctx.Region); err != nil {
 			fmt.Println(err)
 			return httpex.NewError(500, "", "Failed to init lambda client")
+		}
+		fmt.Println("done")
+	}
+
+	return nil
+}
+
+// InitLambdaClientTaskMiddleware init lambda client task middleware
+func InitLambdaClientTaskMiddleware(ctx *sfnex.Context) error {
+	if LambdaClient == nil {
+		fmt.Print("[Middleware] Init Lambda Client...")
+		if err := InitLambdaClient(ctx.Region); err != nil {
+			fmt.Println(err)
+			return errors.New("Failed to init lambda client")
 		}
 		fmt.Println("done")
 	}
