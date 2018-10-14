@@ -10,8 +10,8 @@ import (
 	"github.com/olivere/elastic"
 )
 
-// CloudwatchLogsEventTask cloudwatch logs event task struct
-type CloudwatchLogsEventTask struct {
+// LoggingTask logging task struct
+type LoggingTask struct {
 	// CloudwatchLogs
 	Event     events.CloudwatchLogsEvent
 	LogEvents []events.CloudwatchLogsLogEvent
@@ -26,7 +26,7 @@ type CloudwatchLogsEventTask struct {
 }
 
 // GetLogEvents get log events
-func (t *CloudwatchLogsEventTask) GetLogEvents() error {
+func (t *LoggingTask) GetLogEvents() error {
 	// Get cloudwatch logs data
 	data, err := t.Event.AWSLogs.Parse()
 	if err != nil {
@@ -45,7 +45,7 @@ func (t *CloudwatchLogsEventTask) GetLogEvents() error {
 }
 
 // NewBulkableRequests new bulkable requests
-func (t *CloudwatchLogsEventTask) NewBulkableRequests() {
+func (t *LoggingTask) NewBulkableRequests() {
 	// New bulkable requests
 	t.BulkableRequests = make([]elastic.BulkableRequest, 0)
 
@@ -73,7 +73,7 @@ func (t *CloudwatchLogsEventTask) NewBulkableRequests() {
 }
 
 // SendBulkableRequests send bulkable requests
-func (t *CloudwatchLogsEventTask) SendBulkableRequests() error {
+func (t *LoggingTask) SendBulkableRequests() error {
 	// Set attempted
 	t.Attempted = len(t.BulkableRequests)
 
@@ -111,7 +111,7 @@ func (t *CloudwatchLogsEventTask) SendBulkableRequests() error {
 }
 
 // ResultInline result inline
-func (t *CloudwatchLogsEventTask) ResultInline() string {
+func (t *LoggingTask) ResultInline() string {
 	return fmt.Sprintf("attempted: %d, successful: %d, failed: %d",
 		t.Attempted, t.Successful, t.Failed,
 	)
