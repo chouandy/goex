@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/aws/aws-sdk-go-v2/service/lambda"
-	"github.com/chouandy/goex/awsex"
+	"github.com/chouandy/goex/awsex/service/lambdaex"
 )
 
 // SearchProxyInput search proxy input struct
@@ -29,7 +29,7 @@ func SendSearchProxyRequest(i *SearchProxyInput) (json.RawMessage, error) {
 		Payload:      payload,
 	}
 	// New request
-	req := awsex.LambdaClient.InvokeRequest(input)
+	req := lambdaex.Client.InvokeRequest(input)
 	// Send request
 	resp, err := req.Send()
 	if err != nil {
