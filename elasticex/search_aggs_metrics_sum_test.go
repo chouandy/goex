@@ -32,7 +32,7 @@ func TestSumAggregation(t *testing.T) {
 			}
 			source, err := agg.Build().Source()
 			assert.Nil(t, err)
-			data, err := json.Marshal(source)
+			data, err := jsonex.Marshal(source)
 			assert.Nil(t, err)
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))

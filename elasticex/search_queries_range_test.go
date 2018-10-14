@@ -59,7 +59,7 @@ func TestRangeQuery(t *testing.T) {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			source, err := testCase.query.Build().Source()
 			assert.Nil(t, err)
-			data, err := json.Marshal(source)
+			data, err := jsonex.Marshal(source)
 			assert.Nil(t, err)
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))

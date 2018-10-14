@@ -195,7 +195,7 @@ func TestTermsAggregation(t *testing.T) {
 			assert.Equal(t, testCase.expected.name, name)
 			source, err := agg.Source()
 			assert.Nil(t, err)
-			data, err := json.Marshal(source)
+			data, err := jsonex.Marshal(source)
 			assert.Nil(t, err)
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected.source))
