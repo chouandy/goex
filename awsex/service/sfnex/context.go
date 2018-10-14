@@ -5,9 +5,6 @@ type Context struct {
 	Input     map[string]interface{}
 	Output    map[string]interface{}
 	Exception error
-
-	// Extra
-	Region string
 }
 
 // NewContext new context
