@@ -1,34 +1,35 @@
-package awsex
+package kmsex
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
-	"github.com/chouandy/goex/awsex/apigwex"
+	"github.com/chouandy/goex/awsex/service/apigatewayex"
 	"github.com/chouandy/goex/httpex"
 )
 
-// KMSClient kms client
-var KMSClient *kms.KMS
+// Client kms client
+var Client *kms.KMS
 
-// InitKMSClient init kms client
-func InitKMSClient(region string) error {
+// InitClient init kms client
+func InitClient() error {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return err
 	}
-	cfg.Region = region
-	KMSClient = kms.New(cfg)
+	cfg.Region = os.Getenv("REGION")
+	Client = kms.New(cfg)
 
 	return nil
 }
 
-// InitKMSClientMiddleware init kms client middleware
-func InitKMSClientMiddleware(ctx *apigwex.Context) error {
-	if KMSClient == nil {
+// InitClientMiddleware init kms client middleware
+func InitClientMiddleware(ctx *apigatewayex.Context) error {
+	if Client == nil {
 		fmt.Print("[Middleware] Init KMS Client...")
-		if err := InitKMSClient(ctx.Region); err != nil {
+		if err := InitClient(); err != nil {
 			fmt.Println(err)
 			return httpex.NewError(500, "", "Failed to init kms client")
 		}

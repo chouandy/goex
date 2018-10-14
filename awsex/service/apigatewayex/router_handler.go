@@ -1,4 +1,4 @@
-package apigwex
+package apigatewayex
 
 // NotFoundHandler not found handler
 func NotFoundHandler(ctx *Context) {

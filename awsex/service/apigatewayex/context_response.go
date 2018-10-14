@@ -1,4 +1,4 @@
-package apigwex
+package apigatewayex
 
 import (
 	"net/http"

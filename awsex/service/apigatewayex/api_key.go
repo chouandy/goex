@@ -1,4 +1,4 @@
-package apigwex
+package apigatewayex
 
 import "github.com/aws/aws-lambda-go/events"
 

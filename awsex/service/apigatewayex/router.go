@@ -1,4 +1,4 @@
-package apigwex
+package apigatewayex
 
 // HandlerFunc handler func
 type HandlerFunc func(ctx *Context)

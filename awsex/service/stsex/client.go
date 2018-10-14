@@ -1,34 +1,35 @@
-package awsex
+package stsex
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/chouandy/goex/awsex/apigwex"
+	"github.com/chouandy/goex/awsex/service/apigatewayex"
 	"github.com/chouandy/goex/httpex"
 )
 
-// STSClient sts client
-var STSClient *sts.STS
+// Client sts client
+var Client *sts.STS
 
-// InitSTSClient init sts client
-func InitSTSClient(region string) error {
+// InitClient init sts client
+func InitClient() error {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return err
 	}
-	cfg.Region = region
-	STSClient = sts.New(cfg)
+	cfg.Region = os.Getenv("REGION")
+	Client = sts.New(cfg)
 
 	return nil
 }
 
-// InitSTSClientMiddleware init sts client middleware
-func InitSTSClientMiddleware(ctx *apigwex.Context) error {
-	if STSClient == nil {
+// InitClientMiddleware init sts client middleware
+func InitClientMiddleware(ctx *apigatewayex.Context) error {
+	if Client == nil {
 		fmt.Print("[Middleware] Init STS Client...")
-		if err := InitSTSClient(ctx.Region); err != nil {
+		if err := InitClient(); err != nil {
 			fmt.Println(err)
 			return httpex.NewError(500, "", "Failed to init sts client")
 		}
