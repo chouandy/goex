@@ -32,6 +32,8 @@ type ShapeRef struct {
 
 	OrigShapeName string `json:"-"`
 
+	JSONTag string `json:"jsonTag"`
+
 	GenerateGetter bool
 }
 
@@ -464,6 +466,10 @@ func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
 
 	if ref.Ignore {
 		tags = append(tags, ShapeTag{"ignore", "true"})
+	}
+
+	if ref.JSONTag != "" {
+		tags = append(tags, ShapeTag{"json", ref.JSONTag})
 	}
 
 	return fmt.Sprintf("`%s`", tags)
