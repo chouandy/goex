@@ -27,7 +27,7 @@ func (c *SearchService) GetSearchDateHistogramBuckets(sr *elastic.SearchResult) 
 		for _, bucket := range items.Buckets {
 			// Init item
 			item := SearchDateHistogramItem{
-				Timestamp: (int64)(bucket.Key / 1000),
+				Timestamp: int64(bucket.Key / 1000),
 				Datetime:  *bucket.KeyAsString,
 			}
 			// Get item value
@@ -36,7 +36,7 @@ func (c *SearchService) GetSearchDateHistogramBuckets(sr *elastic.SearchResult) 
 			} else {
 				sum := SearchDateHistogramSumItem{}
 				jsonex.Unmarshal(*bucket.Aggregations[c.DateHistogramAggregation.SumAggregation.Field], &sum)
-				item.Value = (int64)(sum.Value)
+				item.Value = int64(sum.Value)
 			}
 			// Append buckets item
 			buckets = append(buckets, item)

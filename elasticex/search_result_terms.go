@@ -25,7 +25,7 @@ func (c *SearchService) GetSearchTermBuckets(sr *elastic.SearchResult) (json.Raw
 			} else {
 				sum := SearchTermsSumItem{}
 				jsonex.Unmarshal(*bucket.Aggregations[c.TermsAggregation.SumAggregation.Field], &sum)
-				subTerm[bucket.Key.(string)] = (int64)(sum.Value)
+				subTerm[bucket.Key.(string)] = int64(sum.Value)
 			}
 		}
 	}
@@ -55,7 +55,7 @@ func (c *SearchService) GetSearchTermsBuckets(sr *elastic.SearchResult) (json.Ra
 					} else {
 						sum := SearchTermsSumItem{}
 						jsonex.Unmarshal(*subBucket.Aggregations[c.TermsAggregation.SumAggregation.Field], &sum)
-						subTerm[subBucket.Key.(string)] = (int64)(sum.Value)
+						subTerm[subBucket.Key.(string)] = int64(sum.Value)
 					}
 				}
 			}
