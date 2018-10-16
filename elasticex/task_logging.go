@@ -20,9 +20,7 @@ type LoggingTask struct {
 	Stage            string
 	Region           string
 	BulkableRequests []elastic.BulkableRequest
-	Attempted        int
-	Successful       int
-	Failed           int
+	Result           *Result
 }
 
 // GetLogEvents get log events
@@ -75,14 +73,16 @@ func (t *LoggingTask) NewBulkableRequests() {
 // SendBulkableRequests send bulkable requests
 func (t *LoggingTask) SendBulkableRequests() error {
 	// Set attempted
-	t.Attempted = len(t.BulkableRequests)
+	t.Result = &Result{
+		Attempted: len(t.BulkableRequests),
+	}
 
 	// Chunk bulkable requests and send
-	for i := 0; i < t.Attempted; i += 50 {
+	for i := 0; i < t.Result.Attempted; i += 50 {
 		// New chunk end
 		end := i + 50
-		if end > t.Attempted {
-			end = t.Attempted
+		if end > t.Result.Attempted {
+			end = t.Result.Attempted
 		}
 		// Get chunk
 		chunk := t.BulkableRequests[i:end]
@@ -100,19 +100,12 @@ func (t *LoggingTask) SendBulkableRequests() error {
 				if debug {
 					fmt.Println(item.Error)
 				}
-				t.Failed++
+				t.Result.Failed++
 			} else {
-				t.Successful++
+				t.Result.Successful++
 			}
 		}
 	}
 
 	return nil
-}
-
-// ResultInline result inline
-func (t *LoggingTask) ResultInline() string {
-	return fmt.Sprintf("attempted: %d, successful: %d, failed: %d",
-		t.Attempted, t.Successful, t.Failed,
-	)
 }
