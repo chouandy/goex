@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/chouandy/goex/awsex/service/cloudwatchex"
-
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	"github.com/chouandy/goex/awsex/service/cloudwatchex"
 )
 
-// Result firehose result struct
+// Result result struct
 type Result struct {
 	Attempted  int `json:"attempted"`
 	Successful int `json:"successful"`

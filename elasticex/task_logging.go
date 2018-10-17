@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -47,27 +48,50 @@ func (t *LoggingTask) NewBulkableRequests() {
 	// New bulkable requests
 	t.BulkableRequests = make([]elastic.BulkableRequest, 0)
 
+	/* Handle log events concurrently */
+	// New wg
+	var wg sync.WaitGroup
+	// wg add
+	wg.Add(len(t.LogEvents))
+	// New texts queue
+	queue := make(chan elastic.BulkableRequest, 1)
+
 	// Interate log events
-	for _, event := range t.LogEvents {
-		// Unmarshal event message
-		var log map[string]interface{}
-		if err := jsonex.Unmarshal([]byte(event.Message), &log); err != nil {
-			continue
-		}
-		// Set stage, region
-		log["stage"] = t.Stage
-		log["region"] = t.Region
-		// Get index by timestamp
-		timestamp, err := time.Parse(time.RFC3339, log["timestamp"].(string))
-		if err != nil {
-			continue
-		}
-		index := indexPrefix + "-" + timestamp.Format("2006.01.02")
-		// New bulkable request
-		bulkableRequest := elastic.NewBulkIndexRequest().Index(index).Type("doc").Id(event.ID).Doc(log)
-		// Append to bulkable requests
-		t.BulkableRequests = append(t.BulkableRequests, bulkableRequest)
+	for i := range t.LogEvents {
+		go func(event events.CloudwatchLogsLogEvent) {
+			// Unmarshal event message
+			var log map[string]interface{}
+			if err := jsonex.Unmarshal([]byte(event.Message), &log); err != nil {
+				return
+			}
+			// Set stage, region
+			log["stage"] = t.Stage
+			log["region"] = t.Region
+			// Get index by timestamp
+			timestamp, err := time.Parse(time.RFC3339, log["timestamp"].(string))
+			if err != nil {
+				return
+			}
+			index := indexPrefix + "-" + timestamp.Format("2006.01.02")
+			// New bulkable request
+			bulkableRequest := elastic.NewBulkIndexRequest().Index(index).Type("doc").Id(event.ID).Doc(log)
+			// Send bulkable request to queue
+			queue <- bulkableRequest
+		}(t.LogEvents[i])
 	}
+
+	// Receive bulkable request from queue
+	go func() {
+		for bulkableRequest := range queue {
+			// Append to bulkable requests
+			t.BulkableRequests = append(t.BulkableRequests, bulkableRequest)
+			// wg done
+			wg.Done()
+		}
+	}()
+
+	// wg wait
+	wg.Wait()
 }
 
 // SendBulkableRequests send bulkable requests
@@ -77,8 +101,12 @@ func (t *LoggingTask) SendBulkableRequests() error {
 		Attempted: len(t.BulkableRequests),
 	}
 
+	// New throttle
+	throttle := time.Tick(time.Second / 10)
 	// Chunk bulkable requests and send
 	for i := 0; i < t.Result.Attempted; i += 50 {
+		<-throttle
+
 		// New chunk end
 		end := i + 50
 		if end > t.Result.Attempted {
