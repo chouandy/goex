@@ -200,7 +200,7 @@ func TestTermsAggregation(t *testing.T) {
 			buffer := new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected.source))
 			assert.Nil(t, err)
-			assert.Equal(t, string(buffer.Bytes()), string(data))
+			assert.Equal(t, buffer.String(), string(data))
 		})
 	}
 }

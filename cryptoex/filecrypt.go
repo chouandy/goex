@@ -80,6 +80,9 @@ func FileDecrypter(src string, dst string, key []byte) error {
 	str := hex.EncodeToString(salt)
 
 	nonce, err := hex.DecodeString(str)
+	if err != nil {
+		return err
+	}
 
 	dk := pbkdf2.Key(key, nonce, 4096, 32, sha1.New)
 

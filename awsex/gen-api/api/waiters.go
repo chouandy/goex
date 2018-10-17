@@ -67,10 +67,10 @@ func (a *API) AttachWaiters(filename string) {
 	p := waiterDefinitions{API: a}
 
 	f, err := os.Open(filename)
-	defer f.Close()
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 	err = json.NewDecoder(f).Decode(&p)
 	if err != nil {
 		panic(err)

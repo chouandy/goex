@@ -807,10 +807,7 @@ var unmarshalShapeRefTmpl = template.Must(template.New("unmarshalShapeRefTmpl").
 `))
 
 func CanGenerateProtocolShapes(s *Shape) bool {
-	if s.Type == "list" {
-		return true
-	}
-	return false
+	return s.Type == "list"
 }
 
 var protocolTmpl = template.Must(template.New("protocolTmpl").Funcs(

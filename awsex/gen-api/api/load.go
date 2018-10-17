@@ -12,10 +12,10 @@ import (
 func (a *API) Attach(filename string) {
 	a.path = filepath.Dir(filename)
 	f, err := os.Open(filename)
-	defer f.Close()
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 	if err := json.NewDecoder(f).Decode(a); err != nil {
 		panic(fmt.Errorf("failed to decode %s, err: %v", filename, err))
 	}

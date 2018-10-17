@@ -184,30 +184,6 @@ func writeGoFile(file string, layout string, args ...interface{}) error {
 	return ioutil.WriteFile(file, []byte(util.GoFmt(fmt.Sprintf(layout, args...))), 0664)
 }
 
-// writeServiceDocFile generates the documentation for service package.
-func writeServiceDocFile(g *generateInfo) error {
-	return writeGoFile(filepath.Join(g.PackageDir, "doc.go"),
-		codeLayout,
-		strings.TrimSpace(g.API.ServicePackageDoc()),
-		g.API.PackageName(),
-		"",
-	)
-}
-
-// writeExamplesFile writes out the service example file.
-func writeExamplesFile(g *generateInfo) error {
-	code := g.API.ExamplesGoCode()
-	if len(code) > 0 {
-		return writeGoFile(filepath.Join(g.PackageDir, "examples_test.go"),
-			codeLayout,
-			"",
-			g.API.PackageName()+"_test",
-			code,
-		)
-	}
-	return nil
-}
-
 // writeServiceFile writes out the service initialization file.
 func writeServiceFile(g *generateInfo) error {
 	return writeGoFile(filepath.Join(g.PackageDir, "service.go"),
@@ -218,36 +194,6 @@ func writeServiceFile(g *generateInfo) error {
 	)
 }
 
-// writeInterfaceFile writes out the service interface file.
-func writeInterfaceFile(g *generateInfo) error {
-	const pkgDoc = `
-// Package %s provides an interface to enable mocking the %s service client
-// for testing your code.
-//
-// It is important to note that this interface will have breaking changes
-// when the service model is updated and adds new API operations, paginators,
-// and waiters.`
-	return writeGoFile(filepath.Join(g.PackageDir, g.API.InterfacePackageName(), "interface.go"),
-		codeLayout,
-		fmt.Sprintf(pkgDoc, g.API.InterfacePackageName(), g.API.Metadata.ServiceFullName),
-		g.API.InterfacePackageName(),
-		g.API.InterfaceGoCode(),
-	)
-}
-
-func writeWaitersFile(g *generateInfo) error {
-	if len(g.API.Waiters) == 0 {
-		return nil
-	}
-
-	return writeGoFile(filepath.Join(g.PackageDir, "waiters.go"),
-		codeLayout,
-		"",
-		g.API.PackageName(),
-		g.API.WaitersGoCode(),
-	)
-}
-
 // writeAPIFile writes out the service API file.
 func writeAPIFile(g *generateInfo) error {
 	return writeGoFile(filepath.Join(g.PackageDir, "api.go"),
@@ -255,16 +201,6 @@ func writeAPIFile(g *generateInfo) error {
 		"",
 		g.API.PackageName(),
 		g.API.APIGoCode(),
-	)
-}
-
-// writeAPIErrorsFile writes out the service API errors file.
-func writeAPIErrorsFile(g *generateInfo) error {
-	return writeGoFile(filepath.Join(g.PackageDir, "errors.go"),
-		codeLayout,
-		"",
-		g.API.PackageName(),
-		g.API.APIErrorsGoCode(),
 	)
 }
 

@@ -1,8 +1,6 @@
 package api
 
 func (a *API) suppressEventStreams() {
-	const eventStreamMemberName = "EventStream"
-
 	for name, op := range a.Operations {
 		outbound := hasEventStream(op.InputRef.Shape)
 		inbound := hasEventStream(op.OutputRef.Shape)

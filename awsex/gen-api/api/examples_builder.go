@@ -184,7 +184,7 @@ func (builder defaultExamplesBuilder) BuildScalar(name, memName string, ref *Sha
 
 		switch t {
 		case "timestamp":
-			return parseTimeString(ref, memName, fmt.Sprintf("%s", v))
+			return parseTimeString(ref, memName, v)
 		case "blob":
 			if (ref.Shape.MemberRefs[name].Streaming || ref.Shape.MemberRefs[name].Shape.Streaming) && ref.Shape.Payload == name {
 				return fmt.Sprintf("%s: aws.ReadSeekCloser(strings.NewReader(%q)),\n", memName, v)

@@ -29,10 +29,10 @@ func (a *API) AttachDocs(filename string) {
 	d := apiDocumentation{API: a}
 
 	f, err := os.Open(filename)
-	defer f.Close()
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 	err = json.NewDecoder(f).Decode(&d)
 	if err != nil {
 		panic(err)

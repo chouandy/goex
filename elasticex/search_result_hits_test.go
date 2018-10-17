@@ -500,7 +500,7 @@ func TestGetSearchHits(t *testing.T) {
 			buffer = new(bytes.Buffer)
 			err = json.Compact(buffer, []byte(testCase.expected))
 			assert.Nil(t, err)
-			assert.Equal(t, string(buffer.Bytes()), string(result))
+			assert.Equal(t, buffer.String(), string(result))
 		})
 	}
 }

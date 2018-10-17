@@ -25,7 +25,7 @@ func ConvertStringArrayToJSONArray(data []string) []map[string]interface{} {
 	var new []map[string]interface{}
 	for _, str := range data {
 		var v map[string]interface{}
-		if err := json.Unmarshal([]byte(str), v); err == nil {
+		if err := json.Unmarshal([]byte(str), &v); err == nil {
 			new = append(new, v)
 		}
 	}

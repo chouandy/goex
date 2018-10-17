@@ -101,11 +101,11 @@ func (t *LoggingTask) SendBulkableRequests() error {
 		Attempted: len(t.BulkableRequests),
 	}
 
-	// New throttle
-	throttle := time.Tick(time.Second / 10)
+	// New ticker
+	ticker := time.NewTicker(time.Second / 10)
 	// Chunk bulkable requests and send
 	for i := 0; i < t.Result.Attempted; i += 50 {
-		<-throttle
+		<-ticker.C
 
 		// New chunk end
 		end := i + 50
@@ -134,6 +134,8 @@ func (t *LoggingTask) SendBulkableRequests() error {
 			}
 		}
 	}
+	// Stop ticker
+	ticker.Stop()
 
 	return nil
 }

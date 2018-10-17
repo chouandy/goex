@@ -187,7 +187,7 @@ func getValue(t, v string, asValue bool) string {
 		case "string":
 			return fmt.Sprintf("%q", v)
 		case "integer", "long", "int64", "float", "float64", "double", "boolean":
-			return fmt.Sprintf("%s", v)
+			return v
 		default:
 			panic("Unsupported type: " + t)
 		}
@@ -213,10 +213,10 @@ func (a *API) AttachExamples(filename string) {
 	p := ExamplesDefinition{API: a}
 
 	f, err := os.Open(filename)
-	defer f.Close()
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 	err = json.NewDecoder(f).Decode(&p)
 	if err != nil {
 		panic(err)
