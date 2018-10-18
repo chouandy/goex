@@ -22,6 +22,9 @@ type LoggingTask struct {
 	Region           string
 	BulkableRequests []elastic.BulkableRequest
 	Result           *Result
+
+	// Extra
+	TransformFuncs []LoggingTransformFunc
 }
 
 // GetLogEvents get log events
@@ -63,6 +66,10 @@ func (t *LoggingTask) NewBulkableRequests() {
 			var log map[string]interface{}
 			if err := jsonex.Unmarshal([]byte(event.Message), &log); err != nil {
 				return
+			}
+			// Transform log
+			for _, f := range t.TransformFuncs {
+				f(&log)
 			}
 			// Set stage, region
 			log["stage"] = t.Stage
