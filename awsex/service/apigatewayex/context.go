@@ -58,7 +58,7 @@ func (c *Context) Log() {
 		c.Logger.Location = c.Response.Headers["Location"]
 	}
 	// Set error
-	if c.Response.StatusCode > http.StatusBadRequest {
+	if c.Response.StatusCode >= http.StatusBadRequest {
 		c.Logger.Error = json.RawMessage(c.Response.Body)
 	}
 	// Set response body for debug
