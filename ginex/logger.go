@@ -15,14 +15,17 @@ var NotLoggedPaths map[string]struct{}
 
 // Log log struct
 type Log struct {
-	Timestamp string `json:"timestamp"`
-	Level     string `json:"level"`
-	Status    int    `json:"status"`
-	Method    string `json:"method"`
-	Path      string `json:"path"`
-	Latency   string `json:"latency"`
-	ClientIP  string `json:"client_ip"`
-	Location  string `json:"location,omitempty"`
+	Timestamp             string            `json:"timestamp"`
+	Level                 string            `json:"level"`
+	Status                int               `json:"status"`
+	Method                string            `json:"method"`
+	Path                  string            `json:"path"`
+	Latency               string            `json:"latency"`
+	QueryStringParameters map[string]string `json:"query_string_parameters,omitempty"`
+	PathParameters        map[string]string `json:"path_parameters,omitempty"`
+	Body                  string            `json:"body,omitempty"`
+	ClientIP              string            `json:"client_ip"`
+	Location              string            `json:"location,omitempty"`
 }
 
 // Logger logger
@@ -59,13 +62,27 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 
 		// New log
 		log := &Log{
-			Timestamp: start.Format(time.RFC3339),
-			Level:     httpex.GetLogLevel(c.Writer.Status()),
-			Status:    c.Writer.Status(),
-			Method:    c.Request.Method,
-			Path:      c.Request.URL.Path,
-			Latency:   fmt.Sprintf("%v", time.Now().UTC().Sub(start)),
-			ClientIP:  c.ClientIP(),
+			Timestamp:             start.Format(time.RFC3339),
+			Level:                 httpex.GetLogLevel(c.Writer.Status()),
+			Status:                c.Writer.Status(),
+			Method:                c.Request.Method,
+			Path:                  c.Request.URL.Path,
+			Latency:               fmt.Sprintf("%v", time.Now().UTC().Sub(start)),
+			QueryStringParameters: make(map[string]string),
+			PathParameters:        make(map[string]string),
+			ClientIP:              c.ClientIP(),
+		}
+		// Set query string parameters
+		for key := range c.Request.URL.Query() {
+			log.QueryStringParameters[key] = c.Request.URL.Query().Get(key)
+		}
+		// Set path parameters
+		for _, param := range c.Params {
+			log.PathParameters[param.Key] = param.Value
+		}
+		// Set request body
+		if body, err := c.GetRawData(); err == nil {
+			log.Body = string(body)
 		}
 		// Set location
 		if log.Status == http.StatusFound {
