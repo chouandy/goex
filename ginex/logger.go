@@ -1,6 +1,8 @@
 package ginex
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,8 +26,19 @@ type Log struct {
 	QueryStringParameters map[string]string `json:"query_string_parameters,omitempty"`
 	PathParameters        map[string]string `json:"path_parameters,omitempty"`
 	Body                  string            `json:"body,omitempty"`
+	Error                 json.RawMessage   `json:"error,omitempty"`
 	ClientIP              string            `json:"client_ip"`
 	Location              string            `json:"location,omitempty"`
+}
+
+type bodyLogWriter struct {
+	gin.ResponseWriter
+	body *bytes.Buffer
+}
+
+func (w bodyLogWriter) Write(b []byte) (int, error) {
+	w.body.Write(b)
+	return w.ResponseWriter.Write(b)
 }
 
 // Logger logger
@@ -51,6 +64,13 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Start timer
 		start := time.Now()
+
+		// Replace context writer
+		writer := &bodyLogWriter{
+			ResponseWriter: c.Writer,
+			body:           bytes.NewBufferString(""),
+		}
+		c.Writer = writer
 
 		// Process request
 		c.Next()
@@ -83,6 +103,10 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 		// Set request body
 		if body, err := c.GetRawData(); err == nil {
 			log.Body = string(body)
+		}
+		// Set error
+		if log.Status >= http.StatusBadRequest {
+			log.Error = json.RawMessage(writer.body.Bytes())
 		}
 		// Set location
 		if log.Status == http.StatusFound {
