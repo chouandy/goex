@@ -3,16 +3,18 @@ package ginex
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"time"
 
 	"github.com/chouandy/goex/httpex"
 	"github.com/gin-gonic/gin"
 )
 
-var notLoggedPaths map[string]struct{}
+// NotLoggedPaths not logged paths
+var NotLoggedPaths map[string]struct{}
 
-// logger logger struct
-type logger struct {
+// Log log struct
+type Log struct {
 	Timestamp string `json:"timestamp"`
 	Level     string `json:"level"`
 	Status    int    `json:"status"`
@@ -20,6 +22,7 @@ type logger struct {
 	Path      string `json:"path"`
 	Latency   string `json:"latency"`
 	ClientIP  string `json:"client_ip"`
+	Location  string `json:"location,omitempty"`
 }
 
 // Logger logger
@@ -31,9 +34,9 @@ func Logger() gin.HandlerFunc {
 func LoggerWithNotLogged(paths ...string) gin.HandlerFunc {
 	// Set not logged
 	if length := len(paths); length > 0 {
-		notLoggedPaths = make(map[string]struct{}, length)
+		NotLoggedPaths = make(map[string]struct{}, length)
 		for _, path := range paths {
-			notLoggedPaths[path] = struct{}{}
+			NotLoggedPaths[path] = struct{}{}
 		}
 	}
 
@@ -50,12 +53,12 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 		c.Next()
 
 		// Not logged
-		if _, ok := notLoggedPaths[c.Request.URL.Path]; ok {
+		if _, ok := NotLoggedPaths[c.Request.URL.Path]; ok {
 			return
 		}
 
-		// New logger
-		data, err := jsonex.Marshal(&logger{
+		// New log
+		log := &Log{
 			Timestamp: start.Format(time.RFC3339),
 			Level:     httpex.GetLogLevel(c.Writer.Status()),
 			Status:    c.Writer.Status(),
@@ -63,8 +66,14 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 			Path:      c.Request.URL.Path,
 			Latency:   fmt.Sprintf("%v", time.Now().UTC().Sub(start)),
 			ClientIP:  c.ClientIP(),
-		})
-		// Print
+		}
+		// Set location
+		if log.Status == http.StatusFound {
+			log.Location = c.Writer.Header().Get("Location")
+		}
+		// Marshal log
+		data, err := jsonex.Marshal(log)
+		// Print log
 		if err == nil {
 			fmt.Fprintln(out, string(data))
 		}
