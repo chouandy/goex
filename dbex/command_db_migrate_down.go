@@ -6,21 +6,21 @@ import (
 	"strings"
 )
 
-// DBMigrateUpCommand the command struct
-type DBMigrateUpCommand struct {
+// DBMigrateDownCommand the command struct
+type DBMigrateDownCommand struct {
 	Number int
 }
 
 // Synopsis the synopsis of command
-func (c *DBMigrateUpCommand) Synopsis() string {
-	return "Apply all or N up migrations"
+func (c *DBMigrateDownCommand) Synopsis() string {
+	return "Apply all or N down migrations"
 }
 
 // Help the help of command
-func (c *DBMigrateUpCommand) Help() string {
+func (c *DBMigrateDownCommand) Help() string {
 	helpText := `
-Usage: cmd db migrate up
-	Apply all or N up migrations
+Usage: cmd db migrate down
+	Apply all or N down migrations
 
 Options:
   -n    The number of migrations
@@ -29,9 +29,9 @@ Options:
 }
 
 // Run the main execution of command
-func (c *DBMigrateUpCommand) Run(args []string) int {
+func (c *DBMigrateDownCommand) Run(args []string) int {
 	// Init flag
-	f := flag.NewFlagSet("db migrate up", flag.ContinueOnError)
+	f := flag.NewFlagSet("db migrate new", flag.ContinueOnError)
 	f.IntVar(&c.Number, "n", 0, "n")
 	if err := f.Parse(args); err != nil {
 		fmt.Println(err)
@@ -47,15 +47,11 @@ func (c *DBMigrateUpCommand) Run(args []string) int {
 	}
 	fmt.Println("done")
 
-	/* Migrate Up */
-	fmt.Print("Migrate Up...")
-	if err := MigrateUp(config, c.Number); err != nil {
+	/* Migrate Down */
+	fmt.Print("Migrate Down...")
+	if err := MigrateDown(config, c.Number); err != nil {
 		if strings.Contains(err.Error(), "file does not exist") {
 			fmt.Println("no migrations")
-			return 0
-		}
-		if err.Error() == "no change" {
-			fmt.Println(err)
 			return 0
 		}
 		fmt.Println(err)

@@ -1,8 +1,6 @@
 package dbex
 
-import (
-	"github.com/mitchellh/cli"
-)
+import "github.com/mitchellh/cli"
 
 // Commands commands map
 var Commands = map[string]cli.CommandFactory{
@@ -17,5 +15,8 @@ var Commands = map[string]cli.CommandFactory{
 	},
 	"db migrate up": func() (cli.Command, error) {
 		return &DBMigrateUpCommand{}, nil
+	},
+	"db migrate down": func() (cli.Command, error) {
+		return &DBMigrateDownCommand{}, nil
 	},
 }

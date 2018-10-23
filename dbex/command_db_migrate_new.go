@@ -47,7 +47,8 @@ func (c *DBMigrateNewCommand) Run(args []string) int {
 	}
 	fmt.Println("done")
 
-	fmt.Print("New Migrations...")
+	/* Migrate New */
+	fmt.Print("Migrate New...")
 	if err := MigrateNew(c.Name); err != nil {
 		fmt.Println(err)
 		return 1

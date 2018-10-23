@@ -60,3 +60,25 @@ func MigrateUp(config *Config, n int) error {
 
 	return nil
 }
+
+// MigrateDown migrate down
+func MigrateDown(config *Config, n int) error {
+	// New migrater
+	migrater, err := migrate.New(migrateSource, config.DatabaseURL())
+	if err != nil {
+		return err
+	}
+	defer migrater.Close()
+	// Migrate down
+	if n > 0 {
+		if err := migrater.Steps(-n); err != nil {
+			return err
+		}
+	} else {
+		if err := migrater.Steps(-1); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
