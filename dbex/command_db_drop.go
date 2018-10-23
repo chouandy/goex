@@ -35,6 +35,10 @@ func (c *DBDropCommand) Run(args []string) int {
 
 	fmt.Print("Drop Database...")
 	if err := DropDatabase(config); err != nil {
+		if strings.Contains(err.Error(), "database doesn't exist") {
+			fmt.Println("database doesn't exist")
+			return 0
+		}
 		fmt.Println(err)
 		return 1
 	}

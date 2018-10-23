@@ -35,6 +35,10 @@ func (c *DBCreateCommand) Run(args []string) int {
 
 	fmt.Print("Create Database...")
 	if err := CreateDatabase(config); err != nil {
+		if strings.Contains(err.Error(), "database exists") {
+			fmt.Println("database already exists")
+			return 0
+		}
 		fmt.Println(err)
 		return 1
 	}
