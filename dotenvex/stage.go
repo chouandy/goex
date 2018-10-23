@@ -1,4 +1,4 @@
-package deployex
+package dotenvex
 
 import "os"
 
