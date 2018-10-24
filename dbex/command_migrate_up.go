@@ -6,18 +6,18 @@ import (
 	"strings"
 )
 
-// DBMigrateUpCommand the command struct
-type DBMigrateUpCommand struct {
+// MigrateUpCommand the command struct
+type MigrateUpCommand struct {
 	Number int
 }
 
 // Synopsis the synopsis of command
-func (c *DBMigrateUpCommand) Synopsis() string {
+func (c *MigrateUpCommand) Synopsis() string {
 	return "Apply all or N up migrations"
 }
 
 // Help the help of command
-func (c *DBMigrateUpCommand) Help() string {
+func (c *MigrateUpCommand) Help() string {
 	helpText := `
 Usage: cmd db migrate up
 	Apply all or N up migrations
@@ -29,7 +29,7 @@ Options:
 }
 
 // Run the main execution of command
-func (c *DBMigrateUpCommand) Run(args []string) int {
+func (c *MigrateUpCommand) Run(args []string) int {
 	// Init flag
 	f := flag.NewFlagSet("db migrate up", flag.ContinueOnError)
 	f.IntVar(&c.Number, "n", 0, "n")

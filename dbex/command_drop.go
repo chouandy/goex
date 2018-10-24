@@ -5,16 +5,16 @@ import (
 	"strings"
 )
 
-// DBDropCommand the command struct
-type DBDropCommand struct{}
+// DropCommand the command struct
+type DropCommand struct{}
 
 // Synopsis the synopsis of command
-func (c *DBDropCommand) Synopsis() string {
+func (c *DropCommand) Synopsis() string {
 	return "Drop database"
 }
 
 // Help the help of command
-func (c *DBDropCommand) Help() string {
+func (c *DropCommand) Help() string {
 	helpText := `
 Usage: cmd db create
   Drop database
@@ -23,7 +23,7 @@ Usage: cmd db create
 }
 
 // Run the main execution of command
-func (c *DBDropCommand) Run(args []string) int {
+func (c *DropCommand) Run(args []string) int {
 	/* New DB Config */
 	fmt.Print("New DB Config...")
 	config, err := NewConfig()

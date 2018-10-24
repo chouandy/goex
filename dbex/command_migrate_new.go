@@ -7,18 +7,18 @@ import (
 	"strings"
 )
 
-// DBMigrateNewCommand the command struct
-type DBMigrateNewCommand struct {
+// MigrateNewCommand the command struct
+type MigrateNewCommand struct {
 	Name string
 }
 
 // Synopsis the synopsis of command
-func (c *DBMigrateNewCommand) Synopsis() string {
+func (c *MigrateNewCommand) Synopsis() string {
 	return "New a set of timestamped up/down migrations"
 }
 
 // Help the help of command
-func (c *DBMigrateNewCommand) Help() string {
+func (c *MigrateNewCommand) Help() string {
 	helpText := `
 Usage: cmd db migrate new
 	New a set of timestamped up/down migrations
@@ -30,7 +30,7 @@ Options:
 }
 
 // Run the main execution of command
-func (c *DBMigrateNewCommand) Run(args []string) int {
+func (c *MigrateNewCommand) Run(args []string) int {
 	// Init flag
 	f := flag.NewFlagSet("db migrate new", flag.ContinueOnError)
 	f.StringVar(&c.Name, "name", "", "name")
@@ -59,7 +59,7 @@ func (c *DBMigrateNewCommand) Run(args []string) int {
 }
 
 // ValidateOptions validate options
-func (c *DBMigrateNewCommand) ValidateOptions() error {
+func (c *MigrateNewCommand) ValidateOptions() error {
 	if len(c.Name) == 0 {
 		return errors.New("name can't be blank")
 	}

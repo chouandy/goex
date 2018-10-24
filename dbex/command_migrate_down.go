@@ -6,18 +6,18 @@ import (
 	"strings"
 )
 
-// DBMigrateDownCommand the command struct
-type DBMigrateDownCommand struct {
+// MigrateDownCommand the command struct
+type MigrateDownCommand struct {
 	Number int
 }
 
 // Synopsis the synopsis of command
-func (c *DBMigrateDownCommand) Synopsis() string {
+func (c *MigrateDownCommand) Synopsis() string {
 	return "Apply all or N down migrations"
 }
 
 // Help the help of command
-func (c *DBMigrateDownCommand) Help() string {
+func (c *MigrateDownCommand) Help() string {
 	helpText := `
 Usage: cmd db migrate down
 	Apply all or N down migrations
@@ -29,7 +29,7 @@ Options:
 }
 
 // Run the main execution of command
-func (c *DBMigrateDownCommand) Run(args []string) int {
+func (c *MigrateDownCommand) Run(args []string) int {
 	// Init flag
 	f := flag.NewFlagSet("db migrate new", flag.ContinueOnError)
 	f.IntVar(&c.Number, "n", 0, "n")

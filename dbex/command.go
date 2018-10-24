@@ -5,18 +5,18 @@ import "github.com/mitchellh/cli"
 // Commands commands map
 var Commands = map[string]cli.CommandFactory{
 	"db create": func() (cli.Command, error) {
-		return &DBCreateCommand{}, nil
+		return &CreateCommand{}, nil
 	},
 	"db drop": func() (cli.Command, error) {
-		return &DBDropCommand{}, nil
+		return &DropCommand{}, nil
 	},
 	"db migrate new": func() (cli.Command, error) {
-		return &DBMigrateNewCommand{}, nil
+		return &MigrateNewCommand{}, nil
 	},
 	"db migrate up": func() (cli.Command, error) {
-		return &DBMigrateUpCommand{}, nil
+		return &MigrateUpCommand{}, nil
 	},
 	"db migrate down": func() (cli.Command, error) {
-		return &DBMigrateDownCommand{}, nil
+		return &MigrateDownCommand{}, nil
 	},
 }

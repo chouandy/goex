@@ -5,16 +5,16 @@ import (
 	"strings"
 )
 
-// DBCreateCommand the command struct
-type DBCreateCommand struct{}
+// CreateCommand the command struct
+type CreateCommand struct{}
 
 // Synopsis the synopsis of command
-func (c *DBCreateCommand) Synopsis() string {
+func (c *CreateCommand) Synopsis() string {
 	return "Create database"
 }
 
 // Help the help of command
-func (c *DBCreateCommand) Help() string {
+func (c *CreateCommand) Help() string {
 	helpText := `
 Usage: cmd db create
   Create database
@@ -23,7 +23,7 @@ Usage: cmd db create
 }
 
 // Run the main execution of command
-func (c *DBCreateCommand) Run(args []string) int {
+func (c *CreateCommand) Run(args []string) int {
 	/* New DB Config */
 	fmt.Print("New DB Config...")
 	config, err := NewConfig()
