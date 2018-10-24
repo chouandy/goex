@@ -4,7 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"strconv"
 )
+
+// DataSourceFormat data source format
+var DataSourceFormat = "%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true"
+
+// DataSourceWithoutDatabaseFormat data source without database format
+var DataSourceWithoutDatabaseFormat = "%s:%s@tcp(%s:%s)/?charset=%s"
+
+// DatabaseURLFormat database url format
+var DatabaseURLFormat = "%s://%s:%s@tcp(%s:%s)/%s?charset=%s"
 
 // Config config struct
 type Config struct {
@@ -16,6 +26,8 @@ type Config struct {
 	Database       string
 	Charset        string
 	DefaultCollate string
+	MaxIdleConns   int
+	MaxOpenConns   int
 }
 
 // NewConfig new config
@@ -35,6 +47,10 @@ func NewConfig() (*Config, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
+	// Get max idle conns from env
+	config.GetMaxIdleConnsFromEnv()
+	// Get max open conns from env
+	config.GetMaxOpenConnsFromEnv()
 	// Load default
 	config.LoadDefault()
 
@@ -56,19 +72,41 @@ func (c *Config) Validate() error {
 	return nil
 }
 
+// GetMaxIdleConnsFromEnv get max idle conns from env
+func (c *Config) GetMaxIdleConnsFromEnv() {
+	if maxIdleConns, err := strconv.Atoi(os.Getenv("DB_MAX_IDLE_CONNS")); err == nil {
+		c.MaxIdleConns = maxIdleConns
+	}
+}
+
+// GetMaxOpenConnsFromEnv get max open conns from env
+func (c *Config) GetMaxOpenConnsFromEnv() {
+	if maxOpenConns, err := strconv.Atoi(os.Getenv("DB_MAX_OPEN_CONNS")); err == nil {
+		c.MaxOpenConns = maxOpenConns
+	}
+}
+
 // LoadDefault load default
 func (c *Config) LoadDefault() {
-	// Port default value
+	// Set port default value
 	if len(c.Port) == 0 {
 		c.Port = "3306"
 	}
-	// Charset default value
+	// Set charset default value
 	if len(c.Charset) == 0 {
 		c.Charset = "utf8"
 	}
-	// DefaultCollate default value
+	// Set default collate default value
 	if len(c.DefaultCollate) == 0 {
 		c.DefaultCollate = "utf8_general_ci"
+	}
+	// Set max idle conns default value
+	if c.MaxIdleConns == 0 {
+		c.MaxIdleConns = 10
+	}
+	// Set max open conns default value
+	if c.MaxOpenConns == 0 {
+		c.MaxOpenConns = 100
 	}
 }
 
