@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"strings"
+
+	"github.com/golang-migrate/migrate"
 )
 
 // MigrateUpCommand the command struct
@@ -54,7 +56,7 @@ func (c *MigrateUpCommand) Run(args []string) int {
 			fmt.Println("no migrations")
 			return 0
 		}
-		if err.Error() == "no change" {
+		if err == migrate.ErrNoChange {
 			fmt.Println(err)
 			return 0
 		}

@@ -20,8 +20,8 @@ func SetMigrateDir(dir string) {
 	migrateSource = "file://" + migrateDir
 }
 
-// MigrateNew migrate new
-func MigrateNew(name string) error {
+// MigrateCreate migrate create
+func MigrateCreate(name string) error {
 	// Make migrate dir
 	if err := os.MkdirAll(migratePath, os.ModePerm); err != nil {
 		return err
@@ -81,4 +81,17 @@ func MigrateDown(config *Config, n int) error {
 	}
 
 	return nil
+}
+
+// MigrateDrop migrate drop
+func MigrateDrop(config *Config) error {
+	// New migrater
+	migrater, err := migrate.New(migrateSource, config.DatabaseURL())
+	if err != nil {
+		return err
+	}
+	defer migrater.Close()
+
+	// Migrate drop
+	return migrater.Drop()
 }

@@ -7,21 +7,21 @@ import (
 	"strings"
 )
 
-// MigrateNewCommand the command struct
-type MigrateNewCommand struct {
+// MigrateCreateCommand the command struct
+type MigrateCreateCommand struct {
 	Name string
 }
 
 // Synopsis the synopsis of command
-func (c *MigrateNewCommand) Synopsis() string {
-	return "New a set of timestamped up/down migrations"
+func (c *MigrateCreateCommand) Synopsis() string {
+	return "Create a set of timestamped up/down migrations"
 }
 
 // Help the help of command
-func (c *MigrateNewCommand) Help() string {
+func (c *MigrateCreateCommand) Help() string {
 	helpText := `
-Usage: cmd db migrate new
-	New a set of timestamped up/down migrations
+Usage: cmd db migrate create
+	Create a set of timestamped up/down migrations
 
 Options:
   --name    The migrations' name.
@@ -30,9 +30,9 @@ Options:
 }
 
 // Run the main execution of command
-func (c *MigrateNewCommand) Run(args []string) int {
+func (c *MigrateCreateCommand) Run(args []string) int {
 	// Init flag
-	f := flag.NewFlagSet("db migrate new", flag.ContinueOnError)
+	f := flag.NewFlagSet("db migrate create", flag.ContinueOnError)
 	f.StringVar(&c.Name, "name", "", "name")
 	if err := f.Parse(args); err != nil {
 		fmt.Println(err)
@@ -47,9 +47,9 @@ func (c *MigrateNewCommand) Run(args []string) int {
 	}
 	fmt.Println("done")
 
-	/* Migrate New */
-	fmt.Print("Migrate New...")
-	if err := MigrateNew(c.Name); err != nil {
+	/* Migrate Create */
+	fmt.Print("Migrate Create...")
+	if err := MigrateCreate(c.Name); err != nil {
 		fmt.Println(err)
 		return 1
 	}
@@ -59,7 +59,7 @@ func (c *MigrateNewCommand) Run(args []string) int {
 }
 
 // ValidateOptions validate options
-func (c *MigrateNewCommand) ValidateOptions() error {
+func (c *MigrateCreateCommand) ValidateOptions() error {
 	if len(c.Name) == 0 {
 		return errors.New("name can't be blank")
 	}

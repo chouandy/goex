@@ -10,13 +10,16 @@ var Commands = map[string]cli.CommandFactory{
 	"db drop": func() (cli.Command, error) {
 		return &DropCommand{}, nil
 	},
-	"db migrate new": func() (cli.Command, error) {
-		return &MigrateNewCommand{}, nil
+	"db migrate create": func() (cli.Command, error) {
+		return &MigrateCreateCommand{}, nil
 	},
 	"db migrate up": func() (cli.Command, error) {
 		return &MigrateUpCommand{}, nil
 	},
 	"db migrate down": func() (cli.Command, error) {
 		return &MigrateDownCommand{}, nil
+	},
+	"db migrate drop": func() (cli.Command, error) {
+		return &MigrateDropCommand{}, nil
 	},
 }

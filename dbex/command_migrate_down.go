@@ -31,7 +31,7 @@ Options:
 // Run the main execution of command
 func (c *MigrateDownCommand) Run(args []string) int {
 	// Init flag
-	f := flag.NewFlagSet("db migrate new", flag.ContinueOnError)
+	f := flag.NewFlagSet("db migrate down", flag.ContinueOnError)
 	f.IntVar(&c.Number, "n", 0, "n")
 	if err := f.Parse(args); err != nil {
 		fmt.Println(err)
