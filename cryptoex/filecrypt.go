@@ -16,7 +16,7 @@ import (
 
 // FileEncrypter 使用 key 對 src 檔案加密, 並轉存為 dst 檔案
 func FileEncrypter(src string, dst string, key []byte) error {
-	// Check src file is exist or not
+	// Check src file exists or not
 	if _, err := os.Stat(src); os.IsNotExist(err) {
 		return err
 	}

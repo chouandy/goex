@@ -2,21 +2,32 @@ package dotenvex
 
 import "os"
 
-var stageName = "dev"
+var stage = "dev"
 
-func init() {
-	stage := os.Getenv("STAGE")
-	SetStage(stage)
-}
+var stages = []string{"alpha", "sit", "beta", "staging", "sandbox", "prod"}
 
 // SetStage set stage
-func SetStage(value string) {
-	if len(value) > 0 {
-		stageName = value
+func SetStage(s string) {
+	if len(s) > 0 {
+		stage = s
 	}
+}
+
+// SetStages set stage
+func SetStages(ss []string) {
+	stages = ss
 }
 
 // Stage return stage
 func Stage() string {
-	return stageName
+	return stage
+}
+
+// Stages return stages
+func Stages() []string {
+	return stages
+}
+
+func init() {
+	SetStage(os.Getenv("STAGE"))
 }
