@@ -1,33 +1,65 @@
 package dotenvex
 
-import "os"
+import (
+	"os"
 
-var stage = "dev"
+	"github.com/joho/godotenv"
+)
 
-var stages = []string{"alpha", "sit", "beta", "staging", "sandbox", "prod"}
+var stageName = "dev"
+
+var stageNames = []string{"alpha", "sit", "beta", "staging", "sandbox", "prod"}
 
 // SetStage set stage
-func SetStage(s string) {
-	if len(s) > 0 {
-		stage = s
+func SetStage(stage string) {
+	if len(stage) > 0 {
+		stageName = stage
 	}
 }
 
 // SetStages set stage
-func SetStages(ss []string) {
-	stages = ss
+func SetStages(stages []string) {
+	stageNames = stages
 }
 
 // Stage return stage
 func Stage() string {
-	return stage
+	return stageName
 }
 
 // Stages return stages
 func Stages() []string {
-	return stages
+	return stageNames
 }
 
 func init() {
 	SetStage(os.Getenv("STAGE"))
+}
+
+// LoadByStage load by stage
+// 1. stage file exists
+// 2. stage file does not exist, stage encrypted file exists
+func LoadByStage() {
+	// Check stage file exists or not
+	stageFile := filePrefix + "." + stageName
+	if _, err := os.Stat(stageFile); !os.IsNotExist(err) {
+		godotenv.Load(stageFile)
+		return
+	}
+
+	// Check stage encrypted file exists or not
+	stageEncryptedFile := stageFile + encryptedFileExt
+	if _, err := os.Stat(stageEncryptedFile); os.IsNotExist(err) {
+		return
+	}
+	// Get password from env
+	password := os.Getenv("SECRETS_PASSWORD")
+	if len(password) == 0 {
+		return
+	}
+	// Decrypt stage encrypted file
+	if err := DecryptFile(stageName, []byte(password)); err == nil {
+		godotenv.Load(stageFile)
+		return
+	}
 }

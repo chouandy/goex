@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
-	"github.com/chouandy/goex/cryptoex"
 )
 
 // DecryptCommand the command struct
@@ -57,16 +55,13 @@ func (c *DecryptCommand) Run(args []string) int {
 	fmt.Println("done")
 
 	/* Decrypt Dotenv Files */
-	for _, stage := range stages {
-		// Check file exists or not
-		src := filePrefix + "." + stage + encryptedFileExt
-		if _, err := os.Stat(src); os.IsNotExist(err) {
+	for _, stage := range Stages() {
+		err := DecryptFile(stage, []byte(c.Password))
+		if err != nil && strings.Contains(err.Error(), "no such file or directory") {
 			continue
 		}
-		// Decrypt dotenv file
 		fmt.Print(`Decrypt "` + stage + `" Dotenv File...`)
-		dst := filePrefix + "." + stage
-		if err := cryptoex.FileDecrypter(src, dst, []byte(c.Password)); err != nil {
+		if err != nil {
 			fmt.Println(err)
 			return 1
 		}
