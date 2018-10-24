@@ -47,6 +47,19 @@ func MigrateUp(config *Config, n int) error {
 		return err
 	}
 	defer migrater.Close()
+
+	// Check current version is dirty or not
+	if v, dirty, err := migrater.Version(); err == nil && dirty {
+		// Update the version's dirty to false
+		if err := migrater.Force(int(v)); err != nil {
+			return err
+		}
+		// Migrate down version
+		if err := migrater.Steps(-1); err != nil {
+			return err
+		}
+	}
+
 	// Migrate up
 	if n > 0 {
 		if err := migrater.Steps(n); err != nil {
@@ -69,6 +82,19 @@ func MigrateDown(config *Config, n int) error {
 		return err
 	}
 	defer migrater.Close()
+
+	// Check current version is dirty or not
+	if v, dirty, err := migrater.Version(); err == nil && dirty {
+		// Update the version's dirty to false
+		if err := migrater.Force(int(v)); err != nil {
+			return err
+		}
+		// Migrate down version
+		if err := migrater.Steps(-1); err != nil {
+			return err
+		}
+	}
+
 	// Migrate down
 	if n > 0 {
 		if err := migrater.Steps(-n); err != nil {
@@ -94,4 +120,21 @@ func MigrateDrop(config *Config) error {
 
 	// Migrate drop
 	return migrater.Drop()
+}
+
+// MigrateForce migrate force
+func MigrateForce(config *Config, version int) error {
+	// New migrater
+	migrater, err := migrate.New(migrateSource, config.DatabaseURL())
+	if err != nil {
+		return err
+	}
+	defer migrater.Close()
+
+	// Migrate force
+	if err := migrater.Force(version); err != nil {
+		return err
+	}
+
+	return nil
 }
