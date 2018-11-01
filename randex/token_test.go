@@ -29,8 +29,7 @@ func TestGenerateFriendlyToken(t *testing.T) {
 
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
-			token, err := GenerateFriendlyToken(testCase.length)
-			assert.Nil(t, err)
+			token := GenerateFriendlyToken(testCase.length)
 			assert.Equal(t, testCase.expected, len(token))
 		})
 	}
