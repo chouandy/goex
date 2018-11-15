@@ -6,12 +6,16 @@ import (
 	"text/template"
 )
 
-var tplConfig = template.Must(template.New("config").Parse(`
-var scheme = os.Getenv("{{ .StructName }}_SCHEME")
+var tplConfig = template.Must(template.New("config").Funcs(
+	template.FuncMap{
+		"ToUpper": strings.ToUpper,
+	},
+).Parse(`
+var scheme = os.Getenv("{{ .StructName | ToUpper }}_SCHEME")
 
-var endpoint = os.Getenv("{{ .StructName }}_ENDPOINT")
+var endpoint = os.Getenv("{{ .StructName | ToUpper }}_ENDPOINT")
 
-var apiKey = os.Getenv("{{ .StructName }}_API_KEY")
+var apiKey = os.Getenv("{{ .StructName | ToUpper }}_API_KEY")
 
 // SetScheme set scheme
 func SetScheme(s string) {
