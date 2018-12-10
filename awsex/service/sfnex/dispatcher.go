@@ -1,5 +1,8 @@
 package sfnex
 
+// Dispatcher dispatcher instance
+var Dispatcher *dispatcher
+
 // HandlerFunc handler func
 type HandlerFunc func(ctx *Context)
 
@@ -13,24 +16,24 @@ type Task struct {
 }
 
 // Dispatcher task dispatcher struct
-type Dispatcher struct {
+type dispatcher struct {
 	Tasks map[string]*Task
 }
 
 // NewDispatcher new task dispatcher
-func NewDispatcher() *Dispatcher {
-	return &Dispatcher{
+func NewDispatcher() {
+	Dispatcher = &dispatcher{
 		Tasks: map[string]*Task{},
 	}
 }
 
 // Add add task by state
-func (d *Dispatcher) Add(state string, task *Task) {
+func (d *dispatcher) Add(state string, task *Task) {
 	d.Tasks[state] = task
 }
 
 // Get get task by state
-func (d *Dispatcher) Get(state string) *Task {
+func (d *dispatcher) Get(state string) *Task {
 	task, ok := d.Tasks[state]
 	if !ok {
 		return &Task{
