@@ -35,6 +35,17 @@ func (c *Context) FoundResponse(u string) {
 	}
 }
 
+// ForbiddenResponse forbidden response
+func (c *Context) ForbiddenResponse() {
+	c.Response = events.APIGatewayProxyResponse{
+		StatusCode: http.StatusForbidden,
+		Headers: map[string]string{
+			"Content-Type": httpex.JSONContentType,
+		},
+		Body: `{"message":"Forbidden"}`,
+	}
+}
+
 // NotFoundResponse not found response
 func (c *Context) NotFoundResponse() {
 	c.Response = events.APIGatewayProxyResponse{
