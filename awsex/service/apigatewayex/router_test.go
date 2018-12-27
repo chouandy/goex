@@ -11,7 +11,7 @@ import (
 func TestRouter(t *testing.T) {
 	// Set routers
 	router := NewRouter()
-	router.Add("GET", "hello", &Route{
+	router.Add("GET", "/hello", &Route{
 		Handler: func(ctx *Context) {
 			ctx.OKResponse("world")
 		},

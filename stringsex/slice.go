@@ -68,3 +68,31 @@ func Differences(sliceA, sliceB []string) ([]string, []string, []string) {
 	// 3. Slice A is empty and slice B is empty
 	return sliceA, []string{}, sliceB
 }
+
+// Intersection return intersection
+func Intersection(sliceA, sliceB []string) []string {
+	// Slice A, B are not empty
+	if len(sliceA) > 0 && len(sliceB) > 0 {
+		// New intersection slices
+		inter := make([]string, 0)
+		// Interate slice A
+		for _, strA := range sliceA {
+			// Interate slice B
+			for _, strB := range sliceB {
+				// Is intersection
+				if strA == strB {
+					// Append to inter
+					inter = append(inter, strA)
+					break
+				}
+			}
+		}
+
+		return inter
+	}
+
+	// 1. Slice A is not empty and slice B is empty
+	// 2. Slice A is empty and slice B is not empty
+	// 3. Slice A is empty and slice B is empty
+	return []string{}
+}

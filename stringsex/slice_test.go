@@ -120,3 +120,85 @@ func TestDifferences(t *testing.T) {
 		})
 	}
 }
+
+func TestIntersection(t *testing.T) {
+	// Set test cases
+	testCases := []struct {
+		sliceA   []string
+		sliceB   []string
+		expected struct {
+			intersection []string
+		}
+	}{
+		{
+			sliceA: []string{},
+			sliceB: []string{},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{},
+			},
+		},
+		{
+			sliceA: []string{"a", "b", "c", "d", "e", "f"},
+			sliceB: []string{},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{},
+			},
+		},
+		{
+			sliceA: []string{},
+			sliceB: []string{"a", "b", "c", "d", "e", "f"},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{},
+			},
+		},
+		{
+			sliceA: []string{"a", "b", "c", "d", "e", "f"},
+			sliceB: []string{"a", "b", "c", "d", "e", "f"},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{"a", "b", "c", "d", "e", "f"},
+			},
+		},
+		{
+			sliceA: []string{"a", "b", "c"},
+			sliceB: []string{"d", "e", "f"},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{},
+			},
+		},
+		{
+			sliceA: []string{"a", "b", "c", "d"},
+			sliceB: []string{"c", "d", "e", "f"},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{"c", "d"},
+			},
+		},
+		{
+			sliceA: []string{"a", "b", "c", "d", "e"},
+			sliceB: []string{"b", "c", "d", "e", "f"},
+			expected: struct {
+				intersection []string
+			}{
+				[]string{"b", "c", "d", "e"},
+			},
+		},
+	}
+
+	for i, testCase := range testCases {
+		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
+			intersection := Intersection(testCase.sliceA, testCase.sliceB)
+			assert.Equal(t, testCase.expected.intersection, intersection)
+		})
+	}
+}
