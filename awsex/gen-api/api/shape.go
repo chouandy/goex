@@ -96,6 +96,8 @@ type Shape struct {
 
 	UsedAsInput  bool
 	UsedAsOutput bool
+
+	JSONTag string `json:"jsonTag"`
 }
 
 // ErrorCodeName will return the error shape's name formated for
@@ -470,6 +472,12 @@ func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
 
 	if ref.JSONTag != "" {
 		tags = append(tags, ShapeTag{"json", ref.JSONTag})
+	}
+
+	if toplevel {
+		if ref.Shape.JSONTag != "" {
+			tags = append(tags, ShapeTag{"json", ref.Shape.JSONTag})
+		}
 	}
 
 	return fmt.Sprintf("`%s`", tags)
