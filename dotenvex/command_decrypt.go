@@ -11,7 +11,6 @@ import (
 // DecryptCommand the command struct
 type DecryptCommand struct {
 	Password string
-	Stage    string
 }
 
 // Synopsis the synopsis of command
@@ -27,7 +26,6 @@ Usage: cmd dotenv decrypt
 
 Options:
   --password     The password for decrypt. It can be ENV["SECRETS_PASSWORD"]
-  --stage        Decrypt the stage file.
 `
 	return strings.TrimSpace(helpText)
 }
@@ -37,7 +35,6 @@ func (c *DecryptCommand) Run(args []string) int {
 	// Init flag
 	f := flag.NewFlagSet("dotenv decrypt", flag.ContinueOnError)
 	f.StringVar(&c.Password, "password", "", "password")
-	f.StringVar(&c.Stage, "stage", "", "stage")
 	if err := f.Parse(args); err != nil {
 		fmt.Println(err)
 		return 1
@@ -46,7 +43,7 @@ func (c *DecryptCommand) Run(args []string) int {
 	// Get options from env
 	c.GetOptionsFromEnv()
 
-	/* Validate Options */
+	// Validate Options
 	fmt.Print("Validate Options...")
 	if err := c.ValidateOptions(); err != nil {
 		fmt.Println(err)
@@ -54,7 +51,7 @@ func (c *DecryptCommand) Run(args []string) int {
 	}
 	fmt.Println("done")
 
-	/* Decrypt Dotenv Files */
+	// Decrypt Dotenv Files
 	for _, stage := range Stages() {
 		err := DecryptFile(stage, []byte(c.Password))
 		if err != nil && strings.Contains(err.Error(), "no such file or directory") {

@@ -19,15 +19,16 @@ var DatabaseURLFormat = "%s://%s:%s@tcp(%s:%s)/%s?charset=%s"
 // Config config struct
 type Config struct {
 	Driver         string
-	Username       string
-	Password       string
 	Host           string
 	Port           string
+	Username       string
+	Password       string
 	Database       string
 	Charset        string
 	DefaultCollate string
 	MaxIdleConns   int
 	MaxOpenConns   int
+	LogMode        bool
 }
 
 // NewConfig new config

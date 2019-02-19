@@ -9,11 +9,10 @@ import (
 
 func init() {
 	// Load for go-gin
-	mode := os.Getenv("GIN_MODE")
-	if len(mode) == 0 {
-		mode = "debug"
+	ginMode := os.Getenv("GIN_MODE")
+	if len(ginMode) > 0 {
+		godotenv.Load(".env." + ginMode)
 	}
-	godotenv.Load(".env." + mode)
 
 	// Load by stage
 	dotenvex.LoadByStage()
