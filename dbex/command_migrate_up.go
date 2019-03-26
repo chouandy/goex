@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/golang-migrate/migrate"
+	"github.com/chouandy/migrate"
 )
 
 // MigrateUpCommand the command struct

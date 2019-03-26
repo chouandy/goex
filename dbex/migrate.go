@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/golang-migrate/migrate"
+	"github.com/chouandy/migrate"
 )
 
 var migrateDir = "db/migrate"
