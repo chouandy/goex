@@ -18,6 +18,7 @@ var NotLoggedPaths map[string]struct{}
 // Log log struct
 type Log struct {
 	Timestamp             string            `json:"timestamp"`
+	RequestID             string            `json:"request_id,omitempty"`
 	Level                 string            `json:"level"`
 	Status                int               `json:"status"`
 	Method                string            `json:"method"`
@@ -91,6 +92,10 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 			QueryStringParameters: make(map[string]string),
 			PathParameters:        make(map[string]string),
 			ClientIP:              c.ClientIP(),
+		}
+		// Set request id
+		if requestID, exists := c.Get("request_id"); exists {
+			log.RequestID = requestID.(string)
 		}
 		// Set query string parameters
 		for key := range c.Request.URL.Query() {
