@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/chouandy/goex/httpex"
@@ -24,7 +25,7 @@ type Log struct {
 	Method                string            `json:"method"`
 	Path                  string            `json:"path"`
 	Latency               string            `json:"latency"`
-	QueryStringParameters map[string]string `json:"query_string_parameters,omitempty"`
+	QueryStringParameters url.Values        `json:"query_string_parameters,omitempty"`
 	PathParameters        map[string]string `json:"path_parameters,omitempty"`
 	Body                  string            `json:"body,omitempty"`
 	Error                 json.RawMessage   `json:"error,omitempty"`
@@ -89,7 +90,7 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 			Method:                c.Request.Method,
 			Path:                  c.Request.URL.Path,
 			Latency:               fmt.Sprintf("%v", time.Now().UTC().Sub(start)),
-			QueryStringParameters: make(map[string]string),
+			QueryStringParameters: make(url.Values),
 			PathParameters:        make(map[string]string),
 			ClientIP:              c.ClientIP(),
 		}
@@ -98,9 +99,7 @@ func LoggerWithWriter(out io.Writer) gin.HandlerFunc {
 			log.RequestID = requestID.(string)
 		}
 		// Set query string parameters
-		for key := range c.Request.URL.Query() {
-			log.QueryStringParameters[key] = c.Request.URL.Query().Get(key)
-		}
+		log.QueryStringParameters = c.Request.URL.Query()
 		// Set path parameters
 		for _, param := range c.Params {
 			log.PathParameters[param.Key] = param.Value
