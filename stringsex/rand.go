@@ -3,6 +3,7 @@ package stringsex
 import (
 	"math/rand"
 	"time"
+	"unicode"
 )
 
 // Alphanumeric alphanumeric characters
@@ -17,4 +18,55 @@ func Rand(characters string, n int) string {
 	}
 
 	return string(b)
+}
+
+// PasswordCharacters password characters
+var PasswordCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+`-={}|[]\\:\"<>?,./"
+
+// RandPassword generate randpassword
+func RandPassword(n int, number, upper, lower, special bool) string {
+	password := ""
+	for !CheckPassword(password, number, upper, lower, special) {
+		password = Rand(PasswordCharacters, n)
+	}
+	return password
+}
+
+// CheckPassword check password
+func CheckPassword(password string, number, lower, upper, special bool) bool {
+	// Check Number, Lowercase character, Uppercase character, Special character
+	var isNumber, isLower, isUpper, isSpecial bool
+
+	// Ignore number check
+	if !number {
+		isNumber = true
+	}
+	// Ignore lower check
+	if !lower {
+		isLower = true
+	}
+	// Ignore upper check
+	if !upper {
+		isUpper = true
+	}
+	// Ignore special check
+	if !special {
+		isSpecial = true
+	}
+
+	// Check password
+	for _, c := range password {
+		switch {
+		case unicode.IsNumber(c):
+			isNumber = true
+		case unicode.IsLower(c):
+			isLower = true
+		case unicode.IsUpper(c):
+			isUpper = true
+		case unicode.IsPunct(c) || unicode.IsSymbol(c):
+			isSpecial = true
+		}
+	}
+
+	return isNumber && isLower && isUpper && isSpecial
 }
