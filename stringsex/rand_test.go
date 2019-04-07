@@ -54,7 +54,7 @@ func TestRandPassword(t *testing.T) {
 	for i, testCase := range testCases {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			password := RandPassword(testCase.n, true, true, true, true)
-			assert.True(t, CheckPassword(password, true, true, true, true))
+			assert.True(t, CheckPassword(password, testCase.n, true, true, true, true))
 		})
 	}
 }
@@ -63,6 +63,7 @@ func TestCheckPassword(t *testing.T) {
 	// Set test cases
 	testCases := []struct {
 		password string
+		n        int
 		number   bool
 		lower    bool
 		upper    bool
@@ -71,6 +72,7 @@ func TestCheckPassword(t *testing.T) {
 	}{
 		{
 			password: "0Aa~",
+			n:        4,
 			number:   true,
 			lower:    true,
 			upper:    true,
@@ -79,6 +81,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "Aa~",
+			n:        3,
 			number:   true,
 			lower:    true,
 			upper:    true,
@@ -87,6 +90,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "Aa~",
+			n:        3,
 			number:   false,
 			lower:    true,
 			upper:    true,
@@ -95,6 +99,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "0a~",
+			n:        3,
 			number:   true,
 			lower:    true,
 			upper:    true,
@@ -103,6 +108,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "0a~",
+			n:        3,
 			number:   true,
 			lower:    false,
 			upper:    true,
@@ -111,6 +117,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "0A~",
+			n:        3,
 			number:   true,
 			lower:    true,
 			upper:    true,
@@ -119,6 +126,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "0A~",
+			n:        3,
 			number:   true,
 			lower:    true,
 			upper:    false,
@@ -127,6 +135,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "0Aa",
+			n:        3,
 			number:   true,
 			lower:    true,
 			upper:    true,
@@ -135,6 +144,7 @@ func TestCheckPassword(t *testing.T) {
 		},
 		{
 			password: "0Aa",
+			n:        3,
 			number:   true,
 			lower:    true,
 			upper:    true,
@@ -147,6 +157,7 @@ func TestCheckPassword(t *testing.T) {
 		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
 			assert.Equal(t, testCase.expected, CheckPassword(
 				testCase.password,
+				testCase.n,
 				testCase.number,
 				testCase.upper,
 				testCase.lower,

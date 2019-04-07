@@ -26,14 +26,19 @@ var PasswordCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 // RandPassword generate randpassword
 func RandPassword(n int, number, upper, lower, special bool) string {
 	password := ""
-	for !CheckPassword(password, number, upper, lower, special) {
+	for !CheckPassword(password, n, number, upper, lower, special) {
 		password = Rand(PasswordCharacters, n)
 	}
 	return password
 }
 
 // CheckPassword check password
-func CheckPassword(password string, number, lower, upper, special bool) bool {
+func CheckPassword(password string, n int, number, lower, upper, special bool) bool {
+	// Check length
+	if len(password) < n {
+		return false
+	}
+
 	// Check Number, Lowercase character, Uppercase character, Special character
 	var isNumber, isLower, isUpper, isSpecial bool
 
