@@ -25,7 +25,7 @@ var PasswordCharacters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 
 // RandPassword generate randpassword
 func RandPassword(n int, number, upper, lower, special bool) string {
-	password := ""
+	password := Rand(PasswordCharacters, n)
 	for !CheckPassword(password, n, number, upper, lower, special) {
 		password = Rand(PasswordCharacters, n)
 	}
