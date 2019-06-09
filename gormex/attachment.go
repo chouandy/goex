@@ -2,6 +2,7 @@ package gormex
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"fmt"
@@ -121,7 +122,7 @@ func (a *Attachment) Delete() error {
 	// New request
 	req := s3ex.Client.DeleteObjectRequest(input)
 	// Send request
-	if _, err := req.Send(); err != nil {
+	if _, err := req.Send(context.Background()); err != nil {
 		return err
 	}
 

@@ -13,7 +13,7 @@ import (
 )
 
 // Client lambda client
-var Client *lambda.Lambda
+var Client *lambda.Client
 
 // InitClient init lambda client
 func InitClient() error {

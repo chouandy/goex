@@ -11,7 +11,7 @@ import (
 )
 
 // Client sfn client
-var Client *sfn.SFN
+var Client *sfn.Client
 
 // InitClient init sfn client
 func InitClient() error {

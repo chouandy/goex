@@ -11,7 +11,7 @@ import (
 )
 
 // Client sts client
-var Client *ssm.SSM
+var Client *ssm.Client
 
 // InitClient init sts client
 func InitClient() error {

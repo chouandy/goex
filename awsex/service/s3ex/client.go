@@ -14,7 +14,7 @@ import (
 )
 
 // Client s3 client
-var Client *s3.S3
+var Client *s3.Client
 
 // InitClient init s3 client
 func InitClient() error {

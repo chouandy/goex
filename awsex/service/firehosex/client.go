@@ -11,7 +11,7 @@ import (
 )
 
 // Client firehose client
-var Client *firehose.Firehose
+var Client *firehose.Client
 
 // InitClient init firehose client
 func InitClient() error {

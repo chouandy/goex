@@ -11,7 +11,7 @@ import (
 )
 
 // Client sqs client
-var Client *sqs.SQS
+var Client *sqs.Client
 
 // InitClient init sqs client
 func InitClient() error {

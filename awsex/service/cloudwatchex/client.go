@@ -11,7 +11,7 @@ import (
 )
 
 // Client cloudwatch client
-var Client *cloudwatch.CloudWatch
+var Client *cloudwatch.Client
 
 // InitClient init cloudwatch client
 func InitClient() error {

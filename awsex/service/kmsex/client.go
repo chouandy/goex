@@ -11,7 +11,7 @@ import (
 )
 
 // Client kms client
-var Client *kms.KMS
+var Client *kms.Client
 
 // InitClient init kms client
 func InitClient() error {

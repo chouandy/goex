@@ -11,7 +11,7 @@ import (
 )
 
 // Client dynamodb client
-var Client *dynamodb.DynamoDB
+var Client *dynamodb.Client
 
 // InitClient init dynamodb client
 func InitClient() error {

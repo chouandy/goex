@@ -10,7 +10,7 @@ import (
 )
 
 // Client apigateway client
-var Client *apigateway.APIGateway
+var Client *apigateway.Client
 
 // InitClient init apigateway client
 func InitClient() error {
