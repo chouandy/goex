@@ -297,6 +297,65 @@ func Int64ValueMap(src map[string]*int64) map[string]int64 {
 	return dst
 }
 
+// UInt64 returns a pointer to the uint64 value passed in.
+func UInt64(v uint64) *uint64 {
+	return &v
+}
+
+// UInt64Value returns the value of the uint64 pointer passed in or
+// 0 if the pointer is nil.
+func UInt64Value(v *uint64) uint64 {
+	if v != nil {
+		return *v
+	}
+	return 0
+}
+
+// UInt64Slice converts a slice of uint64 values into a slice of
+// uint64 pointers
+func UInt64Slice(src []uint64) []*uint64 {
+	dst := make([]*uint64, len(src))
+	for i := 0; i < len(src); i++ {
+		dst[i] = &(src[i])
+	}
+	return dst
+}
+
+// UInt64ValueSlice converts a slice of uint64 pointers into a slice of
+// uint64 values
+func UInt64ValueSlice(src []*uint64) []uint64 {
+	dst := make([]uint64, len(src))
+	for i := 0; i < len(src); i++ {
+		if src[i] != nil {
+			dst[i] = *(src[i])
+		}
+	}
+	return dst
+}
+
+// UInt64Map converts a string map of uint64 values into a string
+// map of uint64 pointers
+func UInt64Map(src map[string]uint64) map[string]*uint64 {
+	dst := make(map[string]*uint64)
+	for k, val := range src {
+		v := val
+		dst[k] = &v
+	}
+	return dst
+}
+
+// UInt64ValueMap converts a string map of uint64 pointers into a string
+// map of uint64 values
+func UInt64ValueMap(src map[string]*uint64) map[string]uint64 {
+	dst := make(map[string]uint64)
+	for k, val := range src {
+		if val != nil {
+			dst[k] = *val
+		}
+	}
+	return dst
+}
+
 // Float64 returns a pointer to the float64 value passed in.
 func Float64(v float64) *float64 {
 	return &v
