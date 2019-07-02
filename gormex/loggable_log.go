@@ -12,7 +12,7 @@ import (
 
 const loggableLogsTag = "gorm-loggable-logs"
 
-// LoggableLogModel loggable log model
+// LoggableLogModel loggable log model struct
 type LoggableLogModel struct {
 	ID          uint64
 	TriggerID   uint64
@@ -57,7 +57,7 @@ func NewLoggableLog(scope *gorm.Scope, action string) (interface{}, error) {
 	return loggableLog, nil
 }
 
-// Changes changes
+// Changes changes struct
 type Changes struct {
 	Was map[string]interface{} `json:"was"`
 	Is  map[string]interface{} `json:"is"`
@@ -84,12 +84,14 @@ func NewChanges(scope *gorm.Scope, action string) (*Changes, error) {
 		if !ok {
 			return nil, errors.New("original entity not found")
 		}
+		// New original entity scope
 		originalEntityScope := scope.NewDB().NewScope(
 			originalEntityField.Field.Elem().Interface(),
 		)
 		// Get loggable fields
 		for _, nf := range scope.Fields() {
 			if _, ok := nf.Tag.Lookup(loggableTag); ok {
+				// Get old field by new field name
 				if of, ok := originalEntityScope.FieldByName(nf.Name); ok {
 					// New old value and new value variables
 					var ov, nv interface{}
@@ -131,17 +133,17 @@ func NewChanges(scope *gorm.Scope, action string) (*Changes, error) {
 	return changes, nil
 }
 
-// Value value
+// Value for gorm query
 func (c Changes) Value() (driver.Value, error) {
 	return json.Marshal(c)
 }
 
-// Scan scan
+// Scan for gorm query
 func (c *Changes) Scan(value interface{}) error {
 	return json.Unmarshal(value.([]byte), c)
 }
 
-// Value value
+// String changes to string
 func (c *Changes) String() string {
 	data, _ := json.Marshal(c)
 	return string(data)
