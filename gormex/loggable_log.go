@@ -1,6 +1,7 @@
 package gormex
 
 import (
+	"database/sql/driver"
 	"encoding/json"
 	"errors"
 	"reflect"
@@ -17,7 +18,7 @@ type LoggableLogModel struct {
 	TriggerID   uint64
 	AuditableID uint64
 	Action      string
-	Changes     []byte
+	Changes     Changes
 	CreatedAt   time.Time
 }
 
@@ -51,7 +52,7 @@ func NewLoggableLog(scope *gorm.Scope, action string) (interface{}, error) {
 	}
 	newScope.SetColumn("AuditableID", scope.PrimaryKeyValue())
 	newScope.SetColumn("Action", action)
-	newScope.SetColumn("Changes", changes.MustMarshal())
+	newScope.SetColumn("Changes", changes)
 
 	return loggableLog, nil
 }
@@ -130,8 +131,18 @@ func NewChanges(scope *gorm.Scope, action string) (*Changes, error) {
 	return changes, nil
 }
 
-// MustMarshal must marshal
-func (c *Changes) MustMarshal() []byte {
-	value, _ := json.Marshal(c)
-	return value
+// Value value
+func (c Changes) Value() (driver.Value, error) {
+	return json.Marshal(c)
+}
+
+// Scan scan
+func (c *Changes) Scan(value interface{}) error {
+	return json.Unmarshal(value.([]byte), c)
+}
+
+// Value value
+func (c *Changes) String() string {
+	data, _ := json.Marshal(c)
+	return string(data)
 }
