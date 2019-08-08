@@ -28,12 +28,10 @@ func InitClient() error {
 // InitClientMiddleware init firehose client middleware
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
-		fmt.Print("[Middleware] Init Firehose Client...")
 		if err := InitClient(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("[Middleware] Init Firehose Client...%s\n", err)
 			return httpex.NewError(500, "", "Failed to init firehose client")
 		}
-		fmt.Println("done")
 	}
 
 	return nil

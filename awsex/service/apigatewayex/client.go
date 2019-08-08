@@ -27,12 +27,10 @@ func InitClient() error {
 // InitClientMiddleware init apigateway client middleware
 func InitClientMiddleware(ctx *Context) error {
 	if Client == nil {
-		fmt.Print("[Middleware] Init APIGateway Client...")
 		if err := InitClient(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("[Middleware] Init APIGateway Client...%s\n", err)
 			return httpex.NewError(500, "", "Failed to init apigateway client")
 		}
-		fmt.Println("done")
 	}
 
 	return nil

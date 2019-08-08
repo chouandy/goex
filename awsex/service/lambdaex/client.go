@@ -30,12 +30,10 @@ func InitClient() error {
 // InitClientMiddleware init lambda client middleware
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
-		fmt.Print("[Middleware] Init Lambda Client...")
 		if err := InitClient(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("[Middleware] Init Lambda Client...%s\n", err)
 			return httpex.NewError(500, "", "Failed to init lambda client")
 		}
-		fmt.Println("done")
 	}
 
 	return nil
@@ -44,12 +42,10 @@ func InitClientMiddleware(ctx *apigatewayex.Context) error {
 // InitClientTaskMiddleware init lambda client task middleware
 func InitClientTaskMiddleware(ctx *sfnex.Context) error {
 	if Client == nil {
-		fmt.Print("[Middleware] Init Lambda Client...")
 		if err := InitClient(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("[Middleware] Init Lambda Client...%s\n", err)
 			return errors.New("Failed to init lambda client")
 		}
-		fmt.Println("done")
 	}
 
 	return nil

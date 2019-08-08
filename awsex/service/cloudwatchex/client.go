@@ -28,12 +28,10 @@ func InitClient() error {
 // InitClientMiddleware init cloudwatch client middleware
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
-		fmt.Print("[Middleware] Init CloudWatch Client...")
 		if err := InitClient(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("[Middleware] Init CloudWatch Client...%s\n", err)
 			return httpex.NewError(500, "", "Failed to init cloudwatch client")
 		}
-		fmt.Println("done")
 	}
 
 	return nil

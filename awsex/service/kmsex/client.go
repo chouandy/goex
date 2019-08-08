@@ -28,12 +28,10 @@ func InitClient() error {
 // InitClientMiddleware init kms client middleware
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
-		fmt.Print("[Middleware] Init KMS Client...")
 		if err := InitClient(); err != nil {
-			fmt.Println(err)
+			fmt.Printf("[Middleware] Init KMS Client...%s\n", err)
 			return httpex.NewError(500, "", "Failed to init kms client")
 		}
-		fmt.Println("done")
 	}
 
 	return nil

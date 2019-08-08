@@ -1,47 +1,46 @@
-package s3ex
+package ec2ex
 
 import (
 	"errors"
 	"fmt"
 	"os"
 
-	"github.com/chouandy/goex/awsex/service/sfnex"
-
 	"github.com/aws/aws-sdk-go-v2/aws/external"
-	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/chouandy/goex/awsex/service/apigatewayex"
+	"github.com/chouandy/goex/awsex/service/cloudwatcheventsex"
 	"github.com/chouandy/goex/httpex"
 )
 
-// Client s3 client
-var Client *s3.Client
+// Client ec2 client
+var Client *ec2.Client
 
-// InitClient init s3 client
+// InitClient init ec2 client
 func InitClient() error {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return err
 	}
 	cfg.Region = os.Getenv("REGION")
-	Client = s3.New(cfg)
+	Client = ec2.New(cfg)
 
 	return nil
 }
 
-// InitClientMiddleware init s3 client middleware
+// InitClientMiddleware init ec2 client middleware
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
 		if err := InitClient(); err != nil {
-			fmt.Printf("[Middleware] Init S3 Client...%s\n", err)
-			return httpex.NewError(500, "", "Failed to init s3 client")
+			fmt.Printf("[Middleware] Init EC2 Client...%s\n", err)
+			return httpex.NewError(500, "", "Failed to init ec2 client")
 		}
 	}
 
 	return nil
 }
 
-// InitClientTaskMiddleware init lambda client task middleware
-func InitClientTaskMiddleware(ctx *sfnex.Context) error {
+// InitClientEventMiddleware init ec2 client task middleware
+func InitClientEventMiddleware(ctx *cloudwatcheventsex.Context) error {
 	if Client == nil {
 		if err := InitClient(); err != nil {
 			fmt.Printf("[Middleware] Init S3 Client...%s\n", err)

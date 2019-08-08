@@ -1,36 +1,36 @@
-package sfnex
+package cloudwatcheventsex
 
 import (
 	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws/external"
-	"github.com/aws/aws-sdk-go-v2/service/sfn"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchevents"
 	"github.com/chouandy/goex/awsex/service/apigatewayex"
 	"github.com/chouandy/goex/httpex"
 )
 
-// Client sfn client
-var Client *sfn.Client
+// Client cloudwatchevents client
+var Client *cloudwatchevents.Client
 
-// InitClient init sfn client
+// InitClient init cloudwatchevents client
 func InitClient() error {
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return err
 	}
 	cfg.Region = os.Getenv("REGION")
-	Client = sfn.New(cfg)
+	Client = cloudwatchevents.New(cfg)
 
 	return nil
 }
 
-// InitClientMiddleware init sfn client middleware
+// InitClientMiddleware init cloudwatchevents client middleware
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
 		if err := InitClient(); err != nil {
-			fmt.Printf("[Middleware] Init SFN Client...%s\n", err)
-			return httpex.NewError(500, "", "Failed to init sfn client")
+			fmt.Printf("[Middleware] Init CloudWatch Events Client...%s\n", err)
+			return httpex.NewError(500, "", "Failed to init cloudwatchevents client")
 		}
 	}
 
