@@ -3,7 +3,7 @@ package mailex
 import (
 	"strings"
 
-	"gopkg.in/gomail.v2"
+	"github.com/chouandy/gomail"
 )
 
 // Mail message struct
