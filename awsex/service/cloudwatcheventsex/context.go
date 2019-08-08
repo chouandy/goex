@@ -2,12 +2,6 @@ package cloudwatcheventsex
 
 import "strings"
 
-// Input input struct
-type Input struct {
-	Name   string
-	Params map[string]interface{}
-}
-
 // Context context struct
 type Context struct {
 	Name      string                 `json:"name"`
