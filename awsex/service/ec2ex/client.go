@@ -43,8 +43,8 @@ func InitClientMiddleware(ctx *apigatewayex.Context) error {
 func InitClientEventMiddleware(ctx *cloudwatcheventsex.Context) error {
 	if Client == nil {
 		if err := InitClient(); err != nil {
-			fmt.Printf("[Middleware] Init S3 Client...%s\n", err)
-			return errors.New("Failed to init s3 client")
+			fmt.Printf("[Middleware] Init EC2 Client...%s\n", err)
+			return errors.New("Failed to init ec2 client")
 		}
 	}
 
