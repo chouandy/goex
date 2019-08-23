@@ -1,6 +1,7 @@
 package stringsex
 
 import (
+	"encoding/hex"
 	"math/rand"
 	"time"
 	"unicode"
@@ -74,4 +75,23 @@ func CheckPassword(password string, n int, number, lower, upper, special bool) b
 	}
 
 	return isNumber && isLower && isUpper && isSpecial
+}
+
+// RandomHex generate random hex
+func RandomHex(size int) []byte {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	b := make([]byte, size)
+	r.Read(b)
+
+	return b
+}
+
+// RandomHexString generate random hex string
+func RandomHexString(size int) string {
+	h := RandomHex(size)
+	enc := make([]byte, len(h)*2+2)
+	copy(enc, "0x")
+	hex.Encode(enc[2:], h)
+
+	return string(enc)
 }
