@@ -1,5 +1,14 @@
 package httpex
 
+import (
+	"fmt"
+	"regexp"
+	"strconv"
+)
+
+// GrpcErrorInlineExpression grpc error inline expression
+const GrpcErrorInlineExpression = "statusCode: ([0-9]{3})(?:|, code: ([0-9.].*)), message: (.*)"
+
 // Error error struct
 type Error interface {
 	// Satisfy the generic error interface.
@@ -16,6 +25,9 @@ type Error interface {
 
 	// Returns the inline representation of the error.
 	ErrorInline() string
+
+	// Returns the inline representation of the error.
+	GrpcErrorInline() string
 }
 
 // NewError new error
@@ -78,4 +90,42 @@ func (b baseError) String() string {
 
 func (b baseError) MarshalJSON() ([]byte, error) {
 	return []byte(b.Error()), nil
+}
+
+// GrpcErrorInline returns the inline representation of the error for grpc.
+func (b baseError) GrpcErrorInline() string {
+	if len(b.code) == 0 {
+		return fmt.Sprintf(`statusCode: %d, message: %s`, b.statusCode, b.message)
+	}
+	return fmt.Sprintf(`statusCode: %d, code: %s, message: %s`, b.statusCode, b.code, b.message)
+}
+
+// ParseGrpcErrorInline parse grpc error inline
+func ParseGrpcErrorInline(s string) (httpErr Error, ok bool) {
+	// New regexp
+	reg, err := regexp.Compile(GrpcErrorInlineExpression)
+	if err != nil {
+		return
+	}
+
+	// Check match string
+	if !reg.MatchString(s) {
+		return
+	}
+
+	// Find match string
+	values := reg.FindStringSubmatch(s)
+	if len(values) != 4 {
+		return
+	}
+
+	// convert status code to int
+	statusCode, err := strconv.Atoi(values[1])
+	if err != nil {
+		return
+	}
+
+	httpErr = NewError(statusCode, values[2], values[3])
+	ok = true
+	return
 }
