@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // GrpcErrorInlineExpression grpc error inline expression
@@ -90,6 +93,11 @@ func (b baseError) String() string {
 
 func (b baseError) MarshalJSON() ([]byte, error) {
 	return []byte(b.Error()), nil
+}
+
+// NewGrpcError new grpc error
+func NewGrpcError(c codes.Code, statusCode int, code, message string) error {
+	return status.Errorf(c, newBaseError(statusCode, code, message).GrpcErrorInline())
 }
 
 // GrpcErrorInline returns the inline representation of the error for grpc.
