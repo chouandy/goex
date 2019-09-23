@@ -52,11 +52,13 @@ func LoadByStage() {
 	if _, err := os.Stat(stageEncryptedFile); os.IsNotExist(err) {
 		return
 	}
+
 	// Get password from env
-	password := os.Getenv("SECRETS_PASSWORD")
+	password := GetSecretsPassword()
 	if len(password) == 0 {
 		return
 	}
+
 	// Decrypt stage encrypted file
 	if err := DecryptFile(stageName, []byte(password)); err == nil {
 		godotenv.Load(stageFile)

@@ -29,7 +29,7 @@ func InitClient() error {
 func InitClientMiddleware(ctx *apigatewayex.Context) error {
 	if Client == nil {
 		if err := InitClient(); err != nil {
-			fmt.Printf("[Middleware] Init SQS Client...%s\n", err)
+			fmt.Printf("[Middleware] Init SSM Client...%s\n", err)
 			return httpex.NewError(500, "", "Failed to init ssm client")
 		}
 	}
