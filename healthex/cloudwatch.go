@@ -6,16 +6,14 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 )
 
-var cloudwatchClient *cloudwatch.Client
 var metricName = "HealthyCount"
 
-// CloudWatchMonitor cloudwatch config struct
-type CloudWatchMonitor struct {
+// CloudWatchMonitorCfg cloudwatch config struct
+type CloudWatchMonitorCfg struct {
 	Enable      bool
 	Region      string
 	Namespace   string
@@ -23,38 +21,23 @@ type CloudWatchMonitor struct {
 	Interval    time.Duration // Second
 }
 
-// Init init cloudwatch monitor
-func (c *CloudWatchMonitor) Init() error {
-	// Check enable or not
-	if !c.Enable {
-		return nil
-	}
-
-	// New client
-	if err := c.InitClient(); err != nil {
-		return err
-	}
-
-	go func() {
-		for {
-			// Put metric data
-			c.PutMetricData()
-			// Wait for interval
-			time.Sleep(c.Interval * time.Second)
-		}
-	}()
-
-	return nil
+// CloudWatchMonitor cloudwatch monitor
+type CloudWatchMonitor struct {
+	Client *cloudwatch.Client
+	Cfg    *CloudWatchMonitorCfg
 }
 
-// InitClient init monitor
+// InitClient init client
 func (c *CloudWatchMonitor) InitClient() error {
+	// New aws config
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
 		return err
 	}
-	cfg.Region = c.Region
-	cloudwatchClient = cloudwatch.New(cfg)
+	cfg.Region = c.Cfg.Region
+
+	// New client
+	c.Client = cloudwatch.New(cfg)
 
 	return nil
 }
@@ -66,7 +49,7 @@ func (c *CloudWatchMonitor) PutMetricData() error {
 
 	// New input
 	input := &cloudwatch.PutMetricDataInput{
-		Namespace: aws.String(c.Namespace),
+		Namespace: aws.String(c.Cfg.Namespace),
 		MetricData: []cloudwatch.MetricDatum{
 			cloudwatch.MetricDatum{
 				MetricName: aws.String(metricName),
@@ -76,7 +59,7 @@ func (c *CloudWatchMonitor) PutMetricData() error {
 				Dimensions: []cloudwatch.Dimension{
 					cloudwatch.Dimension{
 						Name:  aws.String("Service"),
-						Value: aws.String(c.ServiceName),
+						Value: aws.String(c.Cfg.ServiceName),
 					},
 				},
 			},
@@ -84,11 +67,44 @@ func (c *CloudWatchMonitor) PutMetricData() error {
 	}
 
 	// New request
-	req := cloudwatchClient.PutMetricDataRequest(input)
+	req := c.Client.PutMetricDataRequest(input)
 	// Send request
 	if _, err := req.Send(context.Background()); err != nil {
 		fmt.Printf("[Health][CloudWatchMonitor][PutMetricData] %s\n", err)
 	}
+
+	return nil
+}
+
+// Run run cloudwatch monitor
+func (c *CloudWatchMonitor) Run() {
+	go func() {
+		for {
+			// Put metric data
+			c.PutMetricData()
+			// Wait for interval
+			time.Sleep(c.Cfg.Interval * time.Second)
+		}
+	}()
+}
+
+// RunCloudWatchMonitor run cloudwatch monitor
+func RunCloudWatchMonitor(cfg *CloudWatchMonitorCfg) error {
+	// Check enable or not
+	if !cfg.Enable {
+		return nil
+	}
+
+	// New monitor
+	monitor := CloudWatchMonitor{Cfg: cfg}
+
+	// Init client
+	if err := monitor.InitClient(); err != nil {
+		return err
+	}
+
+	// Run monitor
+	monitor.Run()
 
 	return nil
 }
