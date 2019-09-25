@@ -24,7 +24,7 @@ type CloudWatchMonitorCfg struct {
 // CloudWatchMonitor cloudwatch monitor
 type CloudWatchMonitor struct {
 	Client *cloudwatch.Client
-	Cfg    *CloudWatchMonitorCfg
+	Cfg    CloudWatchMonitorCfg
 }
 
 // InitClient init client
@@ -89,7 +89,7 @@ func (c *CloudWatchMonitor) Run() {
 }
 
 // RunCloudWatchMonitor run cloudwatch monitor
-func RunCloudWatchMonitor(cfg *CloudWatchMonitorCfg) error {
+func RunCloudWatchMonitor(cfg CloudWatchMonitorCfg) error {
 	// Check enable or not
 	if !cfg.Enable {
 		return nil
