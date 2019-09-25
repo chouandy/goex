@@ -1,5 +1,10 @@
 package stringsex
 
+import (
+	"strconv"
+	"strings"
+)
+
 // Differences return two slices differences
 func Differences(sliceA, sliceB []string) ([]string, []string, []string) {
 	// Slice A, B are not empty
@@ -95,4 +100,26 @@ func Intersection(sliceA, sliceB []string) []string {
 	// 2. Slice A is empty and slice B is not empty
 	// 3. Slice A is empty and slice B is empty
 	return []string{}
+}
+
+// SplitToInt32 split to int32
+func SplitToInt32(s, sep string) []int32 {
+	// Split s with sep
+	ss := strings.Split(s, sep)
+
+	// Convert ss items to int32
+	is := make([]int32, len(ss))
+	for i, s := range ss {
+		// Convert to int32
+		r, err := strconv.ParseInt(s, 10, 32)
+		// If err, set to 0
+		if err != nil {
+			is[i] = 0
+			continue
+		}
+		// Set r to is
+		is[i] = int32(r)
+	}
+
+	return is
 }

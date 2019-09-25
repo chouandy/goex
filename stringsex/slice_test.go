@@ -202,3 +202,35 @@ func TestIntersection(t *testing.T) {
 		})
 	}
 }
+
+func TestSplitToInt32(t *testing.T) {
+	// Set test cases
+	testCases := []struct {
+		s        string
+		expected []int32
+	}{
+		{
+			s:        "1,2,3,4",
+			expected: []int32{1, 2, 3, 4},
+		},
+		{
+			s:        "1,a,3,4",
+			expected: []int32{1, 0, 3, 4},
+		},
+		{
+			s:        "1,2,a,4",
+			expected: []int32{1, 2, 0, 4},
+		},
+		{
+			s:        "1,a,b,4",
+			expected: []int32{1, 0, 0, 4},
+		},
+	}
+
+	for i, testCase := range testCases {
+		t.Run(fmt.Sprintf("TestCase[%d]", i+1), func(t *testing.T) {
+			is := SplitToInt32(testCase.s, ",")
+			assert.Equal(t, testCase.expected, is)
+		})
+	}
+}
