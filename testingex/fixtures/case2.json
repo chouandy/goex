@@ -1,0 +1,14 @@
+{
+  "txid": "f0d5f66ef152ab0d5e4e38b448a9e597d79268215bbe98b585692a82a487e3bb",
+  "version": 1,
+  "locktime": 0,
+  "blockhash": "000000009929404e821ff142e3b98cb5ef58535ecea7f316e82dca5a9b0124c4",
+  "blockheight": 1579784,
+  "confirmations": 398,
+  "time": 1569570207,
+  "blocktime": 1569570207,
+  "valueOut": 0.07226009,
+  "size": 615,
+  "valueIn": 0.07231301,
+  "fees": 0.00005292
+}
