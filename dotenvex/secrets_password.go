@@ -6,25 +6,28 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
-
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/ssm"
 )
 
-var secretsPassword = os.Getenv("SECRETS_PASSWORD")
+var secretsPassword string
 
 var (
-	secretsPasswordPsName   = os.Getenv("SECRETS_PASSWORD_PS_NAME")
-	secretsPasswordPsRegion = os.Getenv("SECRETS_PASSWORD_PS_REGION")
+	secretsPasswordPsName   string
+	secretsPasswordPsRegion string
 )
 
 // GetSecretsPassword get secrects password
 func GetSecretsPassword() string {
 	// Password from env
+	secretsPassword = os.Getenv("SECRETS_PASSWORD")
 	if len(secretsPassword) > 0 {
 		return secretsPassword
 	}
 
+	// Get parameter store envs
+	secretsPasswordPsName = os.Getenv("SECRETS_PASSWORD_PS_NAME")
+	secretsPasswordPsRegion = os.Getenv("SECRETS_PASSWORD_PS_REGION")
 	// Check parameter store envs
 	if len(secretsPasswordPsName) > 0 && len(secretsPasswordPsRegion) > 0 {
 		// Get password from aws parameter store
