@@ -17,7 +17,7 @@ require (
 	github.com/mailru/easyjson v0.7.0
 	github.com/mitchellh/cli v1.0.0
 	github.com/olivere/elastic v6.2.26+incompatible
-	github.com/satori/go.uuid v1.2.0
+	github.com/satori/go.uuid v1.2.1-0.20181028125025-b2ce2384e17b
 	github.com/shopspring/decimal v0.0.0-20191130220710-360f2bc03045
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20191206172530-e9b2fee46413
